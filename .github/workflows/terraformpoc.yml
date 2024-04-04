@@ -28,6 +28,7 @@ jobs:
            export TF_CLOUD_HOSTNAME=${{ vars.TF_CLOUD_HOSTNAME }}
            export TF_WORKSPACE=${{ vars.TF_WORKSPACE }}
            export TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}
+      - run: echo $TF_TOKEN_app_terraform_io
            
       - name: Checkout the repository to the runner
         uses: actions/checkout@v2
