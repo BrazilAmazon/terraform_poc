@@ -1,36 +1,47 @@
-# This is a basic workflow to help you get started with Actions
+name: "Terraform cloud"
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+env:
+  environment : ${{ vars.environment }}
+  TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
+  TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
+  TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
+  TF_TOKEN_app_terraform_io : ${{ vars.TF_TOKEN_app_terraform_io }}
+  ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ vars.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  terraform:
+    name: "Terraform"
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0:
+          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+            
+
+      
