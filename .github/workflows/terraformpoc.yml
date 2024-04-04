@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Show the demo running
         env:
-          VAR1: This is
+          VAR1: ${{ vars.TF_CLOUD_HOSTNAME }}
           VAR2: A Demo of
           VAR3: GitHub Actions
           VAR4: Workflow jobs
