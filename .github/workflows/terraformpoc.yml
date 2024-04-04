@@ -47,6 +47,7 @@ jobs:
             done
             echo "==============================="
             echo ${autotfvars[0]}
+            eacho ${autotfvars[*]}
             echo $PWD
             echo "+++++++++++++++++++++++++++++"
             if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
