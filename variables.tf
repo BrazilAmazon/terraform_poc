@@ -15,3 +15,7 @@ variable "kind" {
     type = string
   
 }
+variable "sku" {
+    type = string
+  
+}
