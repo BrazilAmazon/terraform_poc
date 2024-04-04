@@ -4,10 +4,10 @@ on:
   workflow_dispatch
 
 env:
-  environment : ${{ env.environment }}
-  TF_CLOUD_ORGANIZATION : ${{ env.TF_CLOUD_ORGANIZATION }}
-  TF_CLOUD_HOSTNAME : ${{ env.TF_CLOUD_HOSTNAME }}
-  TF_WORKSPACE : ${{ env.TF_WORKSPACE }}
+  environment : ${{ vars.environment }}
+  TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
+  TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
+  TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
   TF_API_TOKEN : ${{ secrets.TF_API_TOKEN }}
   ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
