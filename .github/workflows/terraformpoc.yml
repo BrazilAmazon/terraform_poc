@@ -40,15 +40,14 @@ jobs:
             echo "------------------------------------------"
             export exitcode=0
             autotfvars=()
-            echo "==============================="
-            echo ${autotfvars[*]}
-            
             for file in $(ls $pwd/$environment/); do
                 if [[ "$file" == *auto.tfvars ]]; then
                     autotfvars+=($file)
                 fi
             done
-            
+            echo "==============================="
+            echo ${autotfvars[*]}
+            echo "+++++++++++++++++++++++++++++"
             if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
                     terraform plan -var-file=<(cat ${autotfvars[*]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
             		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
