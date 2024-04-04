@@ -37,7 +37,8 @@ jobs:
 
       - name: Terraform Plan
         run: |
-            (ls $environment)
+            file=(ls $environment)
+            cat $file
             echo "------------------------------------------"
             export exitcode=0
             autotfvars=()
