@@ -42,4 +42,33 @@ jobs:
 
       - name: Terraform Plan
         run: |
+            export exitcode=0
+            autotfvars=()
             
+            for file in $(ls $environment/); do
+                if [[ "$file" == *auto.tfvars ]]; then
+                    autotfvars+=($file)
+                fi
+            done
+            
+            if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
+                    terraform plan -var-file=<(cat ${autotfvars[*]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                    
+                    if [ $exitcode -eq 1 ]; then
+                      echo Terraform Plan Failed!
+                      exit 1
+                    else 
+                      exit 0
+                    fi
+            else
+                    terraform plan -var-file=<(cat ${autotfvars[0]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                    
+                    if [ $exitcode -eq 1 ]; then
+                      echo Terraform Plan Failed!
+                      exit 1
+                    else 
+                      exit 0
+                    fi
+            fi
