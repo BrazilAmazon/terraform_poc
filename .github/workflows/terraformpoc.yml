@@ -71,4 +71,4 @@ jobs:
                     fi
             fi
       - name: Terraform apply
-        run: terraform apply "tfplan"
+        run: terraform destroy
