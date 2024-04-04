@@ -28,7 +28,7 @@ jobs:
           cli_config_credentials_token: $TF_TOKEN_app_terraform_io
       - name: print envs
         run : |
-           echo $TF_TOKEN_app_terraform_io
+           echo $environment
            
       - name: Terraform Init
         run: terraform init
