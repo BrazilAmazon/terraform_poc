@@ -42,7 +42,7 @@ jobs:
             export exitcode=0
             autotfvars=()
             
-            for file in $(ls $environment/); do
+            for file in $(ls $environment); do
                 if [[ "$file" == *auto.tfvars ]]; then
                     autotfvars+=($file)
                 fi
