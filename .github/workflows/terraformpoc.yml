@@ -26,7 +26,6 @@ jobs:
         with:
           # terraform_version: 0.13.0:
           cli_config_credentials_token: $TF_TOKEN_app_terraform_io
-        env: ${{ secrets.TF_TOKEN_app_terraform_io }}
       - name: print envs
         run : |
            echo $TF_TOKEN_app_terraform_io
