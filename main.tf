@@ -5,6 +5,5 @@ module "rg" {
   rglocation = var.rglocation
   planname = var.planname
   kind = var.kind
-  sku = var.sku
   # insert required variables here
 }
