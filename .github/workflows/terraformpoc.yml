@@ -6,6 +6,7 @@ on:
 jobs:
   first_demo_job:
     runs-on: "ubuntu-latest"
+    environment: env
     name: The first demo job
     steps:
       - name: Show the demo running
