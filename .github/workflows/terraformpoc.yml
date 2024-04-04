@@ -1,20 +1,75 @@
-name: "Terraform"
+name: "Terraform Plan"
 
 on:
   workflow_dispatch
 
+env:
+  environment : ${{ vars.environment }}
+  TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
+  TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
+  TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
+  TF_TOKEN_app_terraform_io : ${{ secrets.TF_API_TOKEN }}
+  ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+
 jobs:
-  first_demo_job:
-    runs-on: "ubuntu-latest"
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
     environment: env
-    name: The first demo job
     steps:
-      - name: Show the demo running
-        env:
-          VAR1: ${{ vars.TF_CLOUD_HOSTNAME }}
-          VAR2: A Demo of
-          VAR3: GitHub Actions
-          VAR4: Workflow jobs
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0:
+          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
         run: |
-          echo $VAR1 $VAR2 $VAR3 $VAR4.
-    
+            export exitcode=0
+            autotfvars=()
+            
+            for file in $(ls $environment/); do
+                if [[ "$file" == *auto.tfvars ]]; then
+                    autotfvars+=($file)
+                fi
+            done
+            
+            if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
+                    terraform plan -var-file=<(cat ${autotfvars[*]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                    
+                    if [ $exitcode -eq 1 ]; then
+                      echo Terraform Plan Failed!
+                      exit 1
+                    else 
+                      exit 0
+                    fi
+            else
+                    terraform plan -var-file=<(cat ${autotfvars[0]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                    
+                    if [ $exitcode -eq 1 ]; then
+                      echo Terraform Plan Failed!
+                      exit 1
+                    else 
+                      exit 0
+                    fi
+            fi
