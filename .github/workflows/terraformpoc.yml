@@ -8,7 +8,7 @@ env:
   TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
   TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
- # TF_TOKEN_app_terraform_io : ${{ vars.TF_TOKEN_app_terraform_io }}
+  TF_TOKEN_app_terraform_io : ${{ secrets.TF_TOKEN_app_terraform_io }}
   ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -21,13 +21,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
+      - run : |
+         export $TF_TOKEN_app_terraform_io
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           # terraform_version: 0.13.0:
-          cli_config_credentials_token: "3XTZIKOaonzCvg.atlasv1.Amxshb2GUpgzhasylyFVpRN51gF8zLm4mFvHDTwtif1UJWdhV2F89wO7TAexyVyMI7U"
-
+          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
       - name: Terraform Init
         id: init
         run: terraform init
