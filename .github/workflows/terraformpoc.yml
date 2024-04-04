@@ -40,6 +40,8 @@ jobs:
             echo "------------------------------------------"
             export exitcode=0
             autotfvars=()
+            echo "==============================="
+            echo ${autotfvars[*]}
             
             for file in $(ls $pwd/$environment/); do
                 if [[ "$file" == *auto.tfvars ]]; then
