@@ -42,7 +42,7 @@ jobs:
             autotfvars=()
             for file in $(ls $environment/); do
                 if [[ "$file" == *auto.tfvars ]]; then
-                    autotfvars+=($file)
+                    autotfvars+=($PWD/$environment/$file)
                 fi
             done
             echo "==============================="
