@@ -8,7 +8,7 @@ env:
   TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
   TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
-  TF_API_TOKEN : ${{ secrets.TF_API_TOKEN }}
+  TF_TOKEN_App_terraform_io : ${{ secrets.TF_API_TOKEN }}
   ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -24,8 +24,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          # terraform_version: 0.13.0:
-          cli_config_credentials_token: $TF_API_TOKEN
+          terraform_version: "1.0.0"
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: print envs
         run : |
            echo $environment
