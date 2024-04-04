@@ -27,7 +27,7 @@ jobs:
            export TF_CLOUD_ORGANIZATION=ddi-support
            export TF_CLOUD_HOSTNAME=app.terraform.io
            export TF_WORKSPACE=rg-workspace
-           export TF_TOKEN_app_terraform_io=F55ZxtUE2pglzQ.atlasv1.z40RIOH8I7cjxSTba4zpzpadU8U0Ns6G5YElz3sdh45EgpltWYNSlLuuYkprH2Zfv5U
+           export TF_TOKEN_app_terraform_io=${{secrets.TF_API_TOKEN}}
       - run: echo $TF_CLOUD_ORGANIZATION
            
       - name: Checkout the repository to the runner
