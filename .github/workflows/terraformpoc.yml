@@ -46,7 +46,7 @@ jobs:
                 fi
             done
             echo "==============================="
-            echo cat ${autotfvars[0]}
+            echo ${autotfvars[0]}
             echo "+++++++++++++++++++++++++++++"
             if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
                     terraform plan -var-file=<(cat ${autotfvars[*]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
