@@ -30,8 +30,11 @@ jobs:
            export TF_TOKEN_app_terraform_io=${{secrets.TF_API_TOKEN}}
       - run: | 
           echo ${{ secrets.TF_API_TOKEN }} >> token.txt
-          ls
-          cat token.txt
+
+      - name: list all files
+        run: ls
+      - name: see token
+        run: cat token.txt
       
            
       - name: Checkout the repository to the runner
