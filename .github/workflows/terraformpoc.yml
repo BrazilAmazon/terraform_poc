@@ -40,13 +40,13 @@ jobs:
             echo "------------------------------------------"
             export exitcode=0
             autotfvars=()
-            for file in $(ls $pwd/$environment/); do
+            for file in $(ls /$environment/); do
                 if [[ "$file" == *auto.tfvars ]]; then
                     autotfvars+=($file)
                 fi
             done
             echo "==============================="
-            echo $(ls $pwd/$environment/)
+            echo $(ls /$environment/)
             echo "+++++++++++++++++++++++++++++"
             if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
                     terraform plan -var-file=<(cat ${autotfvars[*]}) -detailed-exitcode -no-color -out tfplan || export exitcode=$?
