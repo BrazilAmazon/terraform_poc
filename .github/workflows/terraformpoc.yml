@@ -15,9 +15,7 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
 permissions:
-    id-token: write
-    contents: read
-    actions: read
+  actions: read
 jobs:
  terraform:
    name: "Terraform Infrastructure Change Management"
