@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: set team token
         run: |
-          export TF_TOKEN_app_terraform_io="${{ secrets.TF_API_TOKEN }}"
+          echo "TF_TOKEN_app_terraform_io=\""${{ secrets.TF_API_TOKEN }}\"" >> $GITHUB_ENV
           echo $TF_TOKEN_app_terraform_io
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           # terraform_version: 0.13.0:
-          cli_config_credentials_token: ${{ env.TF_TOKEN_app_terraform_io }}
+          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
 
       - name: Terraform Init
         run: terraform init
