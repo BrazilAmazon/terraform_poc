@@ -26,8 +26,8 @@ jobs:
     steps:
       - name: set team token
         run: |
-          export "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
-          echo ${{ env.TF_TOKEN_app_terraform_io }}
+          export TF_TOKEN_app_terraform_io="${{ secrets.TF_API_TOKEN }}"
+          echo $TF_TOKEN_app_terraform_io
       - name: Checkout
         uses: actions/checkout@v3
    
