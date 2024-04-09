@@ -8,7 +8,6 @@ env:
   TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
   TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
-  #TF_TOKEN_app_terraform_io : ${{ secrets.TF_API_TOKEN }}
  # ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -27,7 +26,6 @@ jobs:
       - name: set team token
         run: |
           echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
-          echo $TF_TOKEN_app_terraform_io
       - name: Checkout
         uses: actions/checkout@v3
    
