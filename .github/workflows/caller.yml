@@ -22,7 +22,7 @@ jobs:
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
     with:
       TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
-      TF_CLOUD_HOSTNAME: ${{ needs.TeamTokens.outputs.TF_CLOUD_HOSTNAME }}
+     # TF_CLOUD_HOSTNAME: ${{ needs.TeamTokens.outputs.TF_CLOUD_HOSTNAME }}
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
     secrets:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
