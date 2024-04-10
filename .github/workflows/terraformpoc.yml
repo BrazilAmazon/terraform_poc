@@ -16,6 +16,10 @@ on:
       TF_Team:
         required: true
         type: string
+    secrets:
+      TF_API_TOKEN:
+       required: true
+      
 
 env:
   TF_CLOUD_ORGANIZATION : ${{ inputs.Tf_Cloud_Organization }}
@@ -32,9 +36,6 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
-      - name: Set ENV Token
-        run: | 
-            echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
    
