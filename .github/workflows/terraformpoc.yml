@@ -13,15 +13,21 @@ env:
  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
  # ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
-
 jobs:
+  TeamTokens:
+    runs-on: ubuntu-latest
+    outputs:
+      TF_API_TOKEN: ${{ steps.tf_team_token.outputs.TF_TOKEN_app_terraform_io }}
+    steps:
+      - name: set team token
+        id: tf_team_token
+        run: |
+          echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
+
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
-      - name: print token
-        run: |
-         echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
    
@@ -29,7 +35,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           # terraform_version: 0.13.0:
-          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
+          cli_config_credentials_token: ${{ needs.TeamTokens.outputs.TF_API_TOKEN }}
           
       - name: Terraform Init
         run: terraform init
