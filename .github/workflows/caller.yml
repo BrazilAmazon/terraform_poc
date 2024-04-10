@@ -1,4 +1,4 @@
-name: manipulate TeamTokens
+name: "manipulate TeamTokens"
 
 on:
   workflow_dispatch:
@@ -28,4 +28,3 @@ jobs:
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
     secrets:
       TF_API_TOKEN: ${{ needs.TeamTokens.outputs.TF_API_TOKEN }}
-
