@@ -4,8 +4,7 @@ on:
     inputs:
       Team:
         required: true
-        type: string
-		
+        type: string		
 jobs:
   TeamTokens:
     runs-on: ubuntu-latest
@@ -14,7 +13,6 @@ jobs:
         id: tf_team_token
         run: |
           echo "Hello-world"
-		 
   job2:
     needs: TeamTokens
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
