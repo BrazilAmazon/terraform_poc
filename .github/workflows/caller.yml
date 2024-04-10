@@ -15,6 +15,5 @@ jobs:
     steps:
       - name: set team token
         id: tf_team_token
-        run: |
-          echo "export TF_API_TOKEN=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV	 
+        run: echo "Hello world"
 
