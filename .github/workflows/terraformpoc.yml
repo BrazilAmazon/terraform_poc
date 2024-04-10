@@ -1,34 +1,31 @@
 name: "Terraform Plan"
 
 on:
-  workflow_call:
-    inputs:
-      Tf_Cloud_Organization:
-        description: "cloud organization"
-        required: true
-        type: string
-      Tf_Cloud_Hostname:
-        required: true
-        type: string
-      Tf_Workspace:
-        required: true
-        type: string
-    secrets:
-      TF_API_TOKEN:
-        required: true
+  workflow_call
 
 env:
-  TF_CLOUD_ORGANIZATION : ${{ inputs.Tf_Cloud_Organization }}
-  TF_CLOUD_HOSTNAME : ${{ inputs.Tf_Cloud_Hostname }}
-  TF_WORKSPACE : ${{ inputs.Tf_Workspace }}
-  TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
+  TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
+  TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
+  TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
+ # TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
  # ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
  # ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
 jobs:
+  TeamTokens:
+    runs-on: ubuntu-latest
+    outputs:
+      TF_API_TOKEN: ${{ steps.tf_team_token.outputs.TF_API_TOKEN }}
+    steps:
+      - name: set team token
+        id: tf_team_token
+        run: |
+          echo "TF_API_TOKEN=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
+
   terraform:
+    needs: TeamTokens
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
@@ -41,8 +38,8 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           # terraform_version: 0.13.0:
-          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
-
+          cli_config_credentials_token: ${{ needs.TeamTokens.outputs.TF_API_TOKEN }}
+          
       - name: Terraform Init
         run: terraform init
       
