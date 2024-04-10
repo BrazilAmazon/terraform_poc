@@ -1,7 +1,7 @@
 name: "Terraform Plan"
 
 on:
-  workflow_call:
+  workflow_dispatch
 
 env:
   TF_CLOUD_ORGANIZATION : ${{ vars.Tf_Cloud_Organization }}
