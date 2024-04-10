@@ -6,6 +6,7 @@ on:
       Team:
         required: true
         default: 'Platform_Team'
+
 jobs:
   TeamTokens:
     runs-on: ubuntu-latest
@@ -15,6 +16,7 @@ jobs:
       - name: set team token
         id: tf_team_token
         run: echo "hello"
+
   job2:
     needs: TeamTokens
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
@@ -23,6 +25,4 @@ jobs:
       TF_CLOUD_HOSTNAME: ${{ vars.TF_CLOUD_HOSTNAME }}
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
     secrets:
-      TF_API_TOKEN: ${{ needs.TeamTokens.outputs.TF_API_TOKEN }}
-
-
+      TF_API_TOKEN: ${{ steps.TeamTokens.outputs.TF_API_TOKEN }}
