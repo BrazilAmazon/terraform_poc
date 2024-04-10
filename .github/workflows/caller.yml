@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       Team:
-        required: true
+        required: false
         type: string
         default: 'Platform_Team'
 jobs:
