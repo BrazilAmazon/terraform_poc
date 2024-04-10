@@ -22,7 +22,7 @@ jobs:
       - name: set team token
         id: tf_team_token
         run: |
-          echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
+          echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}"
 
   terraform:
     needs: TeamTokens
@@ -32,7 +32,7 @@ jobs:
       - name: set team token
         id: tf_team_token
         run: |
-          echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
+          echo "TF=${{ needs.TeamTokens.outputs.TF_API_TOKEN }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
    
@@ -40,7 +40,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           # terraform_version: 0.13.0:
-          cli_config_credentials_token: $TF_TOKEN_app_terraform_io
+          cli_config_credentials_token: $TF
           
       - name: Terraform Init
         run: terraform init
