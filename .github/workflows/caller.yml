@@ -19,7 +19,7 @@ jobs:
 
   job2:
     needs: TeamTokens
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     steps:
      - name: get env
        run: echo ${{ needs.TeamTokens.outputs.TF_API_TOKEN }}
