@@ -2,25 +2,11 @@ name: "Terraform Plan"
 
 on:
   workflow_call:
-    inputs:
-      Tf_Cloud_Organization:
-        description: "cloud organization"
-        required: true
-        type: string
-      Tf_Cloud_Hostname:
-        required: true
-        type: string
-      Tf_Workspace:
-        required: true
-        type: string
-    secrets:
-      TF_API_TOKEN:
-        required: true
 
 env:
-  TF_CLOUD_ORGANIZATION : ${{ inputs.Tf_Cloud_Organization }}
-  TF_CLOUD_HOSTNAME : ${{ inputs.Tf_Cloud_Hostname }}
-  TF_WORKSPACE : ${{ inputs.Tf_Workspace }}
+  TF_CLOUD_ORGANIZATION : ${{ vars.Tf_Cloud_Organization }}
+  TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
+  TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
   TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
  # ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
