@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: set team token
         id: tf_team_token
-        run: echo "TF_API_TOKEN=${{ vars.TF_WORKSPACE || 'true' }}" >> $GITHUB_OUTPUT
+        run: echo "TF_API_TOKEN=${{ secrets.TF_API_TOKEN || 'true' }}" >> $GITHUB_OUTPUT
 
   job2:
     needs: TeamTokens
