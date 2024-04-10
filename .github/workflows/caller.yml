@@ -13,8 +13,7 @@ jobs:
       - name: set team token
         id: tf_team_token
         run: |
-          echo "::set-output name=secret_value::${{ secrets.TF_API_TOKEN }}"
-		 
+          echo "::set-output name=secret_value::${{ secrets.TF_API_TOKEN }}"	 
   job2:
     needs: TeamTokens
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
