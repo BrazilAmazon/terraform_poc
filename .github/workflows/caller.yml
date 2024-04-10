@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: set team token
         id: tf_team_token
-        run: echo "TF_CLOUD_HOSTNAME=${{ vars.TF_CLOUD_HOSTNAME || 'true' }}" >> $GITHUB_ENV
+        run: echo "TF_CLOUD_HOSTNAME=${{ vars.TF_API_TOKEN || 'true' }}" >> $GITHUB_ENV
 
   job2:
     needs: TeamTokens
