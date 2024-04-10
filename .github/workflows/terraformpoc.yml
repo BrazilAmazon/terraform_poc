@@ -1,13 +1,27 @@
 name: "Terraform Plan"
 
 on:
-  workflow_dispatch
+  workflow_call:
+    inputs:
+      Tf_Cloud_Organization:
+        description: "cloud organization"
+        required: true
+        type: string
+      Tf_Cloud_Hostname:
+        required: true
+        type: string
+      Tf_Workspace:
+        required: true
+        type: string
+    secrets:
+      TF_API_TOKEN:
+        required: true
 
 env:
-  environment : ${{ vars.environment }}
-  TF_CLOUD_ORGANIZATION : ${{ vars.TF_CLOUD_ORGANIZATION }}
-  TF_CLOUD_HOSTNAME : ${{ vars.TF_CLOUD_HOSTNAME }}
-  TF_WORKSPACE : ${{ vars.TF_WORKSPACE }}
+  TF_CLOUD_ORGANIZATION : ${{ inputs.Tf_Cloud_Organization }}
+  TF_CLOUD_HOSTNAME : ${{ inputs.Tf_Cloud_Hostname }}
+  TF_WORKSPACE : ${{ inputs.Tf_Workspace }}
+  TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
  # ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -17,15 +31,8 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    permissions:
-     packages: write
-     contents: write
-     id-token: write
     environment: env
     steps:
-      - name: set team token
-        run: |
-          echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
    
