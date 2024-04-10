@@ -1,27 +1,25 @@
-name: "manipulate TeamTokens"
+name: manipulate TeamTokens
 on:
-  push:
-    branches:
-      - main
-
+  workflow_dispatch:
+    inputs:
+      Team:
+        required: true
+        type: string
+		
 jobs:
   TeamTokens:
     runs-on: ubuntu-latest
-    outputs:
-      secret_value: ${{ steps.check.outputs.secret_value }}
     steps:
       - name: set team token
         id: tf_team_token
         run: |
-          echo "::set-output name=secret_value::${{ secrets.TF_API_TOKEN }}"	 
-
+          echo "Hello-world"
+		 
   job2:
     needs: TeamTokens
-    runs-on: ubuntu-latest
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
     with:
-      TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
-      TF_CLOUD_HOSTNAME: ${{ secrets.TF_CLOUD_HOSTNAME }}
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
-    env:
-      TF_API_TOKEN: ${{ needs.TeamTokens.outputs.secret_value }}
+      TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+      TF_CLOUD_HOSTNAME: ${{ vars.TF_CLOUD_HOSTNAME }}
+      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+      TF_TEAM: ${{ inputs.Team }}
