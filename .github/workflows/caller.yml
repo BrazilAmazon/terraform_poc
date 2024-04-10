@@ -10,11 +10,11 @@ jobs:
   TeamTokens:
     runs-on: ubuntu-latest
     outputs:
-      TF_API_TOKEN: ${{ steps.tf_team_token.outputs.TF_API_TOKEN }}
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: set team token
         id: tf_team_token
-        run: echo "::set-output name=TF_API_TOKEN::${{ secrets.TF_API_TOKEN }}"
+        run: echo "hello"
   job2:
     needs: TeamTokens
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
