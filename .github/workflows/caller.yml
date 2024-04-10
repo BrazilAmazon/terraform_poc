@@ -4,7 +4,8 @@ on:
     inputs:
       Team:
         required: true
-        type: string		
+        type: string
+        default: 'Platform_Team'
 jobs:
   TeamTokens:
     runs-on: ubuntu-latest
