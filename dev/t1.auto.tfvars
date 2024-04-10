@@ -1,3 +1,3 @@
-rgname = "trraformpoc"
+rgname = "trraformpocab"
 rglocation = "eastus"
 
