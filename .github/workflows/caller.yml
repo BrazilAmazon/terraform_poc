@@ -1,11 +1,8 @@
 name: "manipulate TeamTokens"
-
 on:
-  workflow_dispatch:
-    inputs:
-      Team:
-        required: true
-        default: 'Platform_Team'
+  push:
+   branches:
+    - main
 
 jobs:
   TeamTokens:
