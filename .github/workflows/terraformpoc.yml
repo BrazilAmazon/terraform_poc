@@ -13,9 +13,6 @@ on:
       Tf_Workspace:
         required: true
         type: string
-      TF_Team:
-        required: true
-        type: string
     secrets:
       TF_API_TOKEN:
        required: true
