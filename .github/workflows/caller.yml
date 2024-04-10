@@ -9,7 +9,6 @@ on:
 jobs:
   TeamTokens:
     runs-on: ubuntu-latest
-    environment: env
     outputs:
       TF_API_TOKEN: ${{ steps.tf_team_token.outputs.TF_API_TOKEN }}
     steps:
