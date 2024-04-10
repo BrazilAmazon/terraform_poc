@@ -32,6 +32,8 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
+      - name: print token
+        run: echo $TF_TOKEN_app_terraform_io
       - name: Checkout
         uses: actions/checkout@v3
    
