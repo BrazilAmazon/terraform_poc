@@ -2,8 +2,8 @@ name: manipulate TeamTokens
 on:
   workflow_dispatch:
     inputs:
-      Team:
-        required: false
+      Team: # Corrected input name
+        required: true
         type: string
         default: 'Platform_Team'
 jobs:
