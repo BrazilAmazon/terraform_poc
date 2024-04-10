@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Set ENV Token
         run: | 
-          if [[ "${{ inputs.TF_Team }}" == "Platform_Team"]]; then
+          if [[ "${{ inputs.TF_Team }}" == "Platform_Team"]] then
              echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
           fi
       - name: Checkout
