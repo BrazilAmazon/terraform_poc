@@ -11,18 +11,18 @@ jobs:
   TeamTokens:
     runs-on: ubuntu-latest
     outputs:
-      TF_CLOUD_HOSTNAME: ${{ steps.tf_team_token.outputs.TF_CLOUD_HOSTNAME }}
+      TF_API_TOKEN: ${{ steps.tf_team_token.outputs.TF_API_TOKEN }}
     steps:
       - name: set team token
         id: tf_team_token
-        run: echo "TF_CLOUD_HOSTNAME=${{ vars.TF_API_TOKEN || 'true' }}" >> $GITHUB_ENV
+        run: echo "export TF_API_TOKEN=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
 
   job2:
     needs: TeamTokens
     uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
     with:
       TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
-      TF_CLOUD_HOSTNAME: ${{ needs.TeamTokens.outputs.TF_CLOUD_HOSTNAME }}
+      TF_CLOUD_HOSTNAME: ${{ vars.TF_CLOUD_HOSTNAME }}
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
     secrets:
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      TF_API_TOKEN: ${{ needs.TeamTokens.outputs.TF_API_TOKEN }}
