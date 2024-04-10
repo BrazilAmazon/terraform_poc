@@ -4,7 +4,6 @@ on:
     inputs:
       Team:
         required: true
-        type: string
 		
 jobs:
   TeamTokens:
