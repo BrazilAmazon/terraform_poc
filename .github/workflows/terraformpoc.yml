@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: print token
         run: |
-         echo "export TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
+         echo "export TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}"
       - name: Checkout
         uses: actions/checkout@v3
    
