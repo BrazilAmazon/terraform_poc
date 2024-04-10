@@ -18,12 +18,10 @@ jobs:
   job2:
     needs: TeamTokens
     runs-on: ubuntu-latest
-    steps:
-      - name: Use TeamToken
-        uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
-        with:
-          TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
-          TF_CLOUD_HOSTNAME: ${{ secrets.TF_CLOUD_HOSTNAME }}
-          TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
-        env:
-          TF_API_TOKEN: ${{ needs.TeamTokens.outputs.secret_value }}
+    uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
+    with:
+      TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
+      TF_CLOUD_HOSTNAME: ${{ secrets.TF_CLOUD_HOSTNAME }}
+      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
+    env:
+      TF_API_TOKEN: ${{ needs.TeamTokens.outputs.secret_value }}
