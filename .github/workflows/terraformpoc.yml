@@ -14,25 +14,13 @@ env:
  # ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
 jobs:
-  TeamTokens:
-    runs-on: ubuntu-latest
-    outputs:
-      TF_API_TOKEN: ${{ steps.tf_team_token.outputs.TF_API_TOKEN }}
-    steps:
-      - name: set team token
-        id: tf_team_token
-        run: |
-          echo "TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
-
   terraform:
-    needs: TeamTokens
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
       - name: print token
         run: |
          echo "export TF_TOKEN_app_terraform_io=${{ secrets.TF_API_TOKEN }}" >> $GITHUB_ENV
-         echo $TF_TOKEN_app_terraform_io
       - name: Checkout
         uses: actions/checkout@v3
    
