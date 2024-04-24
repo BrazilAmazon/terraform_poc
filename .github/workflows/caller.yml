@@ -26,4 +26,4 @@ jobs:
       TF_CLOUD_HOSTNAME: ${{ vars.TF_CLOUD_HOSTNAME }}
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
     secrets:
-      TF_API_TOKEN: ${{ inputs.Team == 'Platform_Team' &&  secrets.TF_API_TOKEN || inputs.Team == 'Dev_Team' &&  secrets.TF_API_TOKEN_SAMPLE || inputs.Team == 'System_Team' &&  secrets.TF_API_TOKEN_SYSTEM_TEAM }}
+      TF_API_TOKEN: ${{ inputs.Team == 'Platform_Team' &&  secrets.TF_API_TOKEN || inputs.Team == 'Dev_Team' &&  secrets.TF_API_TOKEN_DEV_TEAM || inputs.Team == 'System_Team' &&  secrets.TF_API_TOKEN_SYSTEM_TEAM }}
