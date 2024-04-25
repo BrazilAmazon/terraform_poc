@@ -52,5 +52,5 @@ jobs:
       - name: Terraform Destroy Plan
         run: |
           terraform state list
-          terraform plan destroy -target="module.rg.azurerm_resource_group.rg"
+          terraform plan -destroy -target="module.rg.azurerm_resource_group.rg"
             
