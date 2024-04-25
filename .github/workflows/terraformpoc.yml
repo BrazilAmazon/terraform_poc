@@ -13,6 +13,9 @@ on:
       Tf_Workspace:
         required: true
         type: string
+      Tf_Destroy:
+        required: true
+        type: string
     secrets:
       TF_API_TOKEN:
        required: true
@@ -23,6 +26,7 @@ env:
   TF_CLOUD_HOSTNAME : ${{ inputs.Tf_Cloud_Hostname }}
   TF_WORKSPACE : ${{ inputs.Tf_Workspace }}
   TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
+  TF_DESTROY: ${{ inputs.Tf_Destroy }}
  # ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -51,35 +55,57 @@ jobs:
             export exitcode=0
             autotfvars=()
             for file in $(ls dev/); do
-                if [[ "$file" == *auto.tfvars ]]; then
-                    autotfvars+=($PWD/dev/$file)
-                fi
+            	if [[ "$file" == *auto.tfvars ]]; then
+            		autotfvars+=($PWD/dev/$file)
+            	fi
             done
             echo "==============================="
             echo ${autotfvars[0]}
             echo ${autotfvars[*]}
             echo $PWD
             echo "+++++++++++++++++++++++++++++"
-            if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
-                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -no-color -out tfdestroyplan || export exitcode=$?
-            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-                    
-                    if [ $exitcode -eq 1 ]; then
-                      echo Terraform Plan Failed!
-                      exit 1
-                    else 
-                      exit 0
-                    fi
-            else
-                    terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) -no-color -out tfdestroyplan || export exitcode=$?
-            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-                    
-                    if [ $exitcode -eq 1 ]; then
-                      echo Terraform Plan Failed!
-                      exit 1
-                    else 
-                      exit 0
-                    fi
+            
+            if [[ "$TF_DESTROY" -eq "targetmodules" ]]; then
+              
+                    deletemodules=(module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example)
+            
+                		for module in "${deletemodules[@]}";
+                		do
+                				formdestroycommand+=" -target='"$module"'"
+                		done
+                
+                		terraform plan -destroy $formdestroycommand -no-color -out tfdestroyplan || export exitcode=$?
+                		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                		
+                		if [ $exitcode -eq 1 ]; then
+                		  echo Terraform Destroy Plan Failed!
+                		  exit 1
+                		else 
+                		  exit 0
+                		fi
+                   
+            elif [[ "$TF_DESTROY" -eq "tfstate" ]]; then
+              
+                if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
+                  			terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -no-color -out tfdestroyplan || export exitcode=$?
+                  			echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                  			
+                  			if [ $exitcode -eq 1 ]; then
+                  			  echo Terraform Destroy Plan Failed!
+                  			  exit 1
+                  			else 
+                  			  exit 0
+                  			fi
+            	   else
+                  			terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) -no-color -out tfdestroyplan || export exitcode=$?
+                  			echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                  			
+                  			if [ $exitcode -eq 1 ]; then
+                  			  echo Terraform Destroy Plan Failed!
+                  			  exit 1
+                  			else 
+                  			  exit 0
+                  			fi
             fi
       - name: Terraform destroy
         run: terraform apply "tfdestroyplan"
