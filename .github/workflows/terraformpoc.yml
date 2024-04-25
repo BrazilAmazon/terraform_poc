@@ -80,5 +80,5 @@ jobs:
                       exit 0
                     fi
             fi
-      - name: Terraform Plan
+      - name: Terraform Apply
         run: terraform apply tfplan -auto-approve
