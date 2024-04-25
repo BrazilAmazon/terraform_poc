@@ -46,4 +46,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: ls
+        run: terraform state list
