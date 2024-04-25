@@ -71,7 +71,7 @@ jobs:
                     formdestroycommand+=" -target=$module"
                 done
             
-                terraform plan -destroy -var-file=<(cat "${autotfvars[*]}") $formdestroycommand -no-color -out tfdestroyplan || export exitcode=$?
+                terraform plan -destroy $formdestroycommand -var-file=<(cat "${autotfvars[*]}") -no-color -out tfdestroyplan || export exitcode=$?
                 echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
             
                 if [ "$exitcode" -eq 1 ]; then
