@@ -60,7 +60,7 @@ jobs:
             echo $PWD
             echo "+++++++++++++++++++++++++++++"
             if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
-                    terraform plan -var-file=<(cat ${autotfvars[*]}) -no-color -out tfplan || export exitcode=$?
+                    terraform plan -var-file=<(cat ${autotfvars[*]}) -no-color -destroy -out tfplandestroy || export exitcode=$?
             		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
                     
                     if [ $exitcode -eq 1 ]; then
@@ -70,7 +70,7 @@ jobs:
                       exit 0
                     fi
             else
-                    terraform plan -var-file=<(cat ${autotfvars[0]}) -no-color -out tfplan || export exitcode=$?
+                    terraform plan -var-file=<(cat ${autotfvars[0]}) -no-color -destroy -out tfplandestroy || export exitcode=$?
             		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
                     
                     if [ $exitcode -eq 1 ]; then
@@ -80,6 +80,4 @@ jobs:
                       exit 0
                     fi
             fi
-            
-      - name: terraform destroy
-        run: terraform plan -destroy
+
