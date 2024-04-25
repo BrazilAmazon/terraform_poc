@@ -83,4 +83,4 @@ jobs:
             fi
 
       - name: Terraform Plan
-        run: terraform plan -destroy
+        run: terraform plan tfplan -destroy
