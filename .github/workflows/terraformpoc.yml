@@ -65,7 +65,7 @@ jobs:
             echo "$PWD"
             echo "+++++++++++++++++++++++++++++"
             
-            if [[ "$TF_DESTROY" == "targetmodules" ]]; then
+            if [[ "$TF_DESTROY" -eq "targetmodules" ]]; then
                 deletemodules=(module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example)
                 for module in "${deletemodules[@]}"; do
                     formdestroycommand+=" -target=$module"
@@ -81,7 +81,7 @@ jobs:
                     exit 0
                 fi
             
-            elif [[ "$TF_DESTROY" == "tfstate" ]]; then
+            elif [[ "$TF_DESTROY" -eq "tfstate" ]]; then
                 if [[ "${#autotfvars[@]}" -gt 1 ]]; then
                     terraform plan -destroy -var-file=<(cat "${autotfvars[*]}") -no-color -out tfdestroyplan || export exitcode=$?
                     echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
