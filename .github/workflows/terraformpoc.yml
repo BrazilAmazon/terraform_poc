@@ -68,7 +68,7 @@ jobs:
             if [[ "$TF_DESTROY" == "targetmodules" ]]; then
                 deletemodules=(module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example)
                 for module in "${deletemodules[@]}"; do
-                    formdestroycommand+=' -target="'$module'"'
+                    formdestroycommand+=" -target=$module"
                 done
             
                 terraform plan -destroy $formdestroycommand -no-color -out tfdestroyplan || export exitcode=$?
