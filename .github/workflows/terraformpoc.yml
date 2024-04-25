@@ -46,4 +46,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform state list
+        run: terraform plan -destroy
