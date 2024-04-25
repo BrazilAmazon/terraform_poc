@@ -76,6 +76,7 @@ jobs:
               else 
                 exit 0
               fi
+            fi
                 
       - name: Terraform destroy
         run: terraform apply "tfdestroyplan"
