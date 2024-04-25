@@ -82,4 +82,4 @@ jobs:
                     fi
             fi
       - name: Terraform destroy
-        run: terraform destroy "tfdestroyplan"
+        run: terraform apply "tfdestroyplan"
