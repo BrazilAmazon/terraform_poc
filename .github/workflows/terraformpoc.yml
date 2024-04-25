@@ -97,7 +97,7 @@ jobs:
             elif [[ "$TF_DESTROY" == "tfstate" ]]; then
                 if [[ "${#autotfvars[@]}" -gt 1 ]]; then
                 
-                    terraform plan -destroy -var-file=<(cat "${autotfvars[*]}") -no-color -out tfdestroyplan || export exitcode=$?
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -no-color -out tfdestroyplan || export exitcode=$?
                     echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
             
                     if [ "$exitcode" -eq 1 ]; then
