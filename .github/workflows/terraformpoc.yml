@@ -27,10 +27,10 @@ env:
   TF_WORKSPACE : ${{ inputs.Tf_Workspace }}
   TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
   TF_DESTROY: ${{ inputs.Tf_Destroy }}
-  ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-  ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+ # ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
+ # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+ # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+ # ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
 jobs:
   terraform:
@@ -51,19 +51,73 @@ jobs:
         
       - name: Terraform Destroy Plan
         run: |
-          terraform state list
-          echo "------------------------------------------"
-          export exitcode=0
-          autotfvars=()
-          for file in $(ls dev/); do
-              if [[ "$file" == *auto.tfvars ]]; then
-                  autotfvars+=("$PWD/dev/$file")
-              fi
-          done
-          echo "==============================="
-          echo "${autotfvars[0]}"
-          echo "${autotfvars[*]}"
-          echo "$PWD"
-          echo "+++++++++++++++++++++++++++++"
-          terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -target=module.rg.azurerm_service_plan.example
-    
+        
+            echo "------------------------------------------"
+            export exitcode=0
+            autotfvars=()
+            for file in $(ls dev/); do
+                if [[ "$file" == *auto.tfvars ]]; then
+                    autotfvars+=("$PWD/dev/$file")
+                fi
+            done
+            echo "==============================="
+            echo "${autotfvars[0]}"
+            echo "${autotfvars[*]}"
+            echo "$PWD"
+            echo "+++++++++++++++++++++++++++++"
+            
+            if [[ "$TF_DESTROY" == "targetmodules" ]]; then
+                deletemodules=(module.rg.azurerm_service_plan.example)
+                for module in "${deletemodules[@]}"; do
+                    formdestroycommand+=" -target=$module"
+                done
+            
+                if [[ "${#autotfvars[@]}" -gt 1 ]]; then
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) $formdestroycommand -out tfdestroyplan || export exitcode=$?
+                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
+            
+                    if [ "$exitcode" -eq 1 ]; then
+                        echo "Terraform Destroy Plan Failed!"
+                        exit 1
+                    else
+                        exit 0
+                    fi
+                else
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) $formdestroycommand -out tfdestroyplan || export exitcode=$?
+                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
+            
+                    if [ "$exitcode" -eq 1 ]; then
+                        echo "Terraform Destroy Plan Failed!"
+                        exit 1
+                    else
+                        exit 0
+                    fi
+                fi
+            
+            elif [[ "$TF_DESTROY" == "tfstate" ]]; then
+                if [[ "${#autotfvars[@]}" -gt 1 ]]; then
+                
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -out tfdestroyplan || export exitcode=$?
+                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
+            
+                    if [ "$exitcode" -eq 1 ]; then
+                        echo "Terraform Destroy Plan Failed!"
+                        exit 1
+                    else
+                        exit 0
+                    fi
+                else
+                
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) -out tfdestroyplan || export exitcode=$?
+                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
+            
+                    if [ "$exitcode" -eq 1 ]; then
+                        echo "Terraform Destroy Plan Failed!"
+                        exit 1
+                    else
+                        exit 0
+                    fi
+                fi
+            fi
+                
+
