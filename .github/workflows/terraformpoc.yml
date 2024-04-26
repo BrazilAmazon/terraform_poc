@@ -135,7 +135,11 @@ jobs:
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
 
-          echo cat $GITHUB_OUTPUT
+      - name: Print OUTput
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo $SUMMARY
               
       - name: Install csvkit to format table output
         run:  sudo pip install csvkit
