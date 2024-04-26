@@ -171,7 +171,7 @@ jobs:
   terraform-destroy-apply:
     name: 'Terraform Destroy Apply'
     #if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
-    if: needs.terraform-plan.outputs.tfplanExitCode == 0
+  #  if: needs.terraform-plan.outputs.tfplanExitCode == 0
     needs: [terraform]
     runs-on: ubuntu-latest
     environment: 
