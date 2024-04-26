@@ -7,7 +7,6 @@ on:
           required: true
           description: choose Team to RUN
           options:
-          - Platform_Team
           - Dev_Team
       Destroy:
           type: choice
