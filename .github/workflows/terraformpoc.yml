@@ -135,13 +135,13 @@ jobs:
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
 
-          echo $GITHUB_OUTPUT
+          echo cat $GITHUB_OUTPUT
               
       - name: Install csvkit to format table output
         run:  sudo pip install csvkit
       - name: print table format
         run: |
-           { echo Destroy Plan Type:Target Modules:Plan;  } | csvlook
+           { echo Destroy_Plan_Type Target_Modules Plan;  } | csvlook
 
                 
 
