@@ -1,22 +1,24 @@
 name: manipulate TeamTokens
+
 on:
   workflow_dispatch:
     inputs:
       Team: 
-          type: choice
-          required: true
-          description: choose Team to RUN
-          options:
+        type: choice
+        required: true
+        description: choose Team to RUN
+        options:
           - Dev_Team
       Destroy:
-          type: choice
-          required: true
-          description: choose To Destroy
-          options:
+        type: choice
+        required: true
+        description: choose to Destroy. Note; If you select targetmodules then You must Provide Target delete Modules.
+        options:
           - targetmodules
           - tfstate
-      
-
+      Target_Destroy:
+        type: string
+        required: false
 jobs:
   TeamTokens:
     runs-on: ubuntu-latest
