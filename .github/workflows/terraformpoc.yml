@@ -66,7 +66,7 @@ jobs:
             echo "+++++++++++++++++++++++++++++"
             
             if [[ "$TF_DESTROY" == "targetmodules" ]]; then
-                deletemodules=(module.rg.azurerm_service_plan.example)
+                deletemodules=(module.rg.azurerm_resource_group.rg)
                 for module in "${deletemodules[@]}"; do
                     formdestroycommand+=" -target=$module"
                 done
