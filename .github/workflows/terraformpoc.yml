@@ -120,8 +120,6 @@ jobs:
                 fi
             fi
             
-      - name: Install csvkit
-        run: sudo pip install csvkit
       - name: print table format
         run: |
            { echo Name:Car; } | csvlook
