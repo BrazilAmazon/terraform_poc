@@ -65,5 +65,5 @@ jobs:
           echo "${autotfvars[*]}"
           echo "$PWD"
           echo "+++++++++++++++++++++++++++++"
-          terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -target=module.rg.azurerm_resource_group.rg
+          terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -target=module.rg.azurerm_service_plan.example
     
