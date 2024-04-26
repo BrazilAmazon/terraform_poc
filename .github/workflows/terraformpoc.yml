@@ -51,7 +51,6 @@ jobs:
         
       - name: Terraform Destroy Plan
         run: |
-        
             echo "------------------------------------------"
             export exitcode=0
             autotfvars=()
@@ -119,10 +118,28 @@ jobs:
                     fi
                 fi
             fi
-            
+      # Create string output of Terraform Plan
+      - name: Create String Output
+        id: tf-plan-string
+        run: |
+          TERRAFORM_PLAN=$(terraform show -no-color tfdestroyplan)
+          
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
+              
+      - name: Install csvkit to format table output
+        run:  sudo pip install csvkit
       - name: print table format
         run: |
-           { echo Name:Car; } | csvlook
+           { echo Destroy Plan Type:Target Modules:Plan;  } | csvlook
 
                 
 
