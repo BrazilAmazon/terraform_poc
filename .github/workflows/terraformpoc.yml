@@ -52,5 +52,18 @@ jobs:
       - name: Terraform Destroy Plan
         run: |
           terraform state list
-          terraform plan -destroy -target="module.rg.azurerm_resource_group.rg"
-            
+          echo "------------------------------------------"
+          export exitcode=0
+          autotfvars=()
+          for file in $(ls dev/); do
+              if [[ "$file" == *auto.tfvars ]]; then
+                  autotfvars+=("$PWD/dev/$file")
+              fi
+          done
+          echo "==============================="
+          echo "${autotfvars[0]}"
+          echo "${autotfvars[*]}"
+          echo "$PWD"
+          echo "+++++++++++++++++++++++++++++"
+          terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -target=module.rg.azurerm_resource_group.rg
+    
