@@ -51,163 +51,40 @@ jobs:
         
       - name: Terraform Destroy Plan
         run: |
+        
             echo "------------------------------------------"
             export exitcode=0
             autotfvars=()
             for file in $(ls dev/); do
                 if [[ "$file" == *auto.tfvars ]]; then
-                    autotfvars+=("$PWD/dev/$file")
+                    autotfvars+=($PWD/dev/$file)
                 fi
             done
             echo "==============================="
-            echo "${autotfvars[0]}"
-            echo "${autotfvars[*]}"
-            echo "$PWD"
+            echo ${autotfvars[0]}
+            echo ${autotfvars[*]}
+            echo $PWD
             echo "+++++++++++++++++++++++++++++"
-            
-            if [[ "$TF_DESTROY" == "targetmodules" ]]; then
-                deletemodules=(module.rg.azurerm_resource_group.rg)
-                for module in "${deletemodules[@]}"; do
-                    formdestroycommand+=" -target=$module"
-                done
-            
-                if [[ "${#autotfvars[@]}" -gt 1 ]]; then
-                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) $formdestroycommand -out tfdestroyplan || export exitcode=$?
-                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
-            
-                    if [ "$exitcode" -eq 1 ]; then
-                        echo "Terraform Destroy Plan Failed!"
-                        exit 1
-                    else
-                        exit 0
-                    fi
-                else
-                    terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) $formdestroycommand -out tfdestroyplan || export exitcode=$?
-                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
-            
-                    if [ "$exitcode" -eq 1 ]; then
-                        echo "Terraform Destroy Plan Failed!"
-                        exit 1
-                    else
-                        exit 0
-                    fi
-                fi
-            
-            elif [[ "$TF_DESTROY" == "tfstate" ]]; then
-                if [[ "${#autotfvars[@]}" -gt 1 ]]; then
-                
-                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -out tfdestroyplan || export exitcode=$?
-                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
-            
-                    if [ "$exitcode" -eq 1 ]; then
-                        echo "Terraform Destroy Plan Failed!"
-                        exit 1
-                    else
-                        exit 0
-                    fi
-                else
-                
-                    terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) -out tfdestroyplan || export exitcode=$?
-                    echo "exitcode=$exitcode" >>$GITHUB_OUTPUT
-            
-                    if [ "$exitcode" -eq 1 ]; then
-                        echo "Terraform Destroy Plan Failed!"
-                        exit 1
-                    else
-                        exit 0
-                    fi
-                fi
-            fi
-            
-      # Save plan to artifacts  
-      - name: Publish Artifact - Terraform Destroy Plan
-        uses: actions/upload-artifact@v3
-        with:
-          name: tfdestroyplan
-          path: tfdestroyplan
-
-      # Create string output of Terraform destroy Plan
-      - name: Create String Output
-        id: tf-destroy-plan-string
-        run: |
-          TERRAFORM_DESTROY_PLAN=$(terraform show -no-color tfdestroyplan)
-          
-          delimiter="$(openssl rand -hex 8)"
-          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "## Terraform Destroy Plan Output" >> $GITHUB_OUTPUT
-          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo '```terraform' >> $GITHUB_OUTPUT
-          echo "$TERRAFORM_DESTROY_PLAN" >> $GITHUB_OUTPUT
-          echo '```' >> $GITHUB_OUTPUT
-          echo "</details>" >> $GITHUB_OUTPUT
-          echo "${delimiter}" >> $GITHUB_OUTPUT
-
-      # Publish Terraform Plan as task summary
-      - name: Publish Terraform Destroy Plan to Task Summary
-        env:
-          SUMMARY: ${{ steps.tf-destroy-plan-string.outputs.summary }}
-        run: |
-          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
-          
-      # If this is a PR post the changes
-      - name: Push Terraform Destroy Output to PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
-        env:
-          SUMMARY: "${{ steps.tf-destroy-plan-string.outputs.summary }}"
-        with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const body = `${process.env.SUMMARY}`;
-              github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: body
-              })
+            if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
+                    terraform plan -var-file=<(cat ${autotfvars[*]}) -no-color -out tfplan || export exitcode=$?
+            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
                     
-  
-  terraform-destroy-apply:
-    name: 'Terraform Destroy Apply'
-    #if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
-  #  if: needs.terraform-plan.outputs.tfplanExitCode == 0
-    needs: [terraform]
-    runs-on: ubuntu-latest
-    environment: 
-     name: Approvals
-    #defaults:
-     # run:
-      #  working-directory: ${{ github.event.inputs.terraform_working_directory }}
-    env:
-      #this is needed since we are running terraform with read-only permissions
-      ARM_SKIP_PROVIDER_REGISTRATION: true
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-       # terraform_wrapper: false
-       # terraform_version: ${{ github.event.inputs.tf_version }}
-        cli_config_credentials_token: $TF_TOKEN_app_terraform_io
-
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
-
-    # Download saved plan from artifacts  
-    - name: Download Terraform Plan
-      uses: actions/download-artifact@v3
-      with:
-        name: tfdestroyplan
-
-    # Terraform Destroy Apply
-    - name: Terraform Destroy Apply
-      if: ${{true}}
-      run: |
-        ls -lra 
-        # -auto-approve not needed if we are passing tfplan file
-        terraform apply tfdestroyplan 
+                    if [ $exitcode -eq 1 ]; then
+                      echo Terraform Plan Failed!
+                      exit 1
+                    else 
+                      exit 0
+                    fi
+            else
+                    terraform plan -var-file=<(cat ${autotfvars[0]}) -no-color -out tfplan || export exitcode=$?
+            		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+                    
+                    if [ $exitcode -eq 1 ]; then
+                      echo Terraform Plan Failed!
+                      exit 1
+                    else 
+                      exit 0
+                    fi
+            fi
+      - name: Terraform Plan
+        run: terraform apply tfplan
