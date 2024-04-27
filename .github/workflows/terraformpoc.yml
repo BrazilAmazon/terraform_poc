@@ -19,7 +19,8 @@ on:
     secrets:
       TF_API_TOKEN:
        required: true
-      
+      ARM_CLIENT_SECRET:
+       required: true     
 
 env:
   TF_CLOUD_ORGANIZATION : ${{ inputs.Tf_Cloud_Organization }}
