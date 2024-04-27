@@ -27,10 +27,10 @@ env:
   TF_WORKSPACE : ${{ inputs.Tf_Workspace }}
   TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
   TF_DESTROY: ${{ inputs.Tf_Destroy }}
-  ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-  ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+  #ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
+  #ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  #ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  #ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
 jobs:
   terraform:
@@ -47,7 +47,7 @@ jobs:
           cli_config_credentials_token: $TF_TOKEN_app_terraform_io
           
       - name: Azure CLI login
-        run: az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+        run: az login --service-principal -u ${{ vars.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ vars.ARM_TENANT_ID }}
 
       - name: Terraform Init
         run: terraform init
