@@ -87,4 +87,4 @@ jobs:
                     fi
             fi
       - name: Terraform Plan
-        run: terraform apply tfpan
+        run: terraform apply "tfplan"
