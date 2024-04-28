@@ -1,5 +1,5 @@
 terraform {
- could {
+ cloud {
 
  }
   required_providers {
