@@ -1,4 +1,7 @@
 terraform {
+ could {
+
+ }
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
