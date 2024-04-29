@@ -1,2 +1,2 @@
 planname = "traawertyuio098nnnnnnn5"
-kind = "Linux"
+kind = "Windows"
