@@ -20,7 +20,6 @@ on:
         description: 'Provide target delete modules like: module.rg.azurerm_resource_group.rg, module.rg.azurerm_service_plan.example'
         type: string
         required: false
-        
 jobs:
   prep:
     runs-on: ubuntu-latest
