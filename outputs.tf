@@ -1,3 +1,3 @@
 output "app_id" {
-  value = module.rg.app_ids
+  value = module.rg
 }
