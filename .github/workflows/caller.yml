@@ -17,7 +17,7 @@ on:
           - targetmodules
           - tfstate
       Target_Destroy:
-        description: 'Provide target delete modules like: module.rg.azurerm_resource_group.rg, module.rg.azurerm_service_plan.example'
+        description: 'Provide target delete modules like: module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example'
         type: string
         required: false
 
