@@ -90,6 +90,8 @@ jobs:
       tf_cloud_hostname: ${{ vars.TF_CLOUD_HOSTNAME }} #org
       tf_cloud_project: ${{ vars.TF_CLOUD_PROJECT }} #repo
       tf_workspace: ${{ needs.prep.outputs.tf_workspace }}
+      Destroy: ${{ inputs.Destroy }}
+      Target_Destroy: ${{ inputs.Target_Destroy }}
       #az_subscription_id: ${{ needs.prep.outputs.az_subscription_id }}
       #az_client_id: ${{ needs.prep.outputs.az_client_id }}
       #az_tenant_id: ${{ vars.AZURE_TENANT_ID }} #org
