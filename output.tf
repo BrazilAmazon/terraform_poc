@@ -1,3 +1,3 @@
 output "rgnames" {
-  value = module.rg
+  value = module.rg.name
 }
