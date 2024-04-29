@@ -1,2 +1,2 @@
-planname = "traawertyuio098nlknnnn5"
+planname = "traawertyuio098nlknmvvnn5"
 kind = "Windows"
