@@ -50,7 +50,7 @@ jobs:
         run: terraform init
 
       - name: check
-        run: ls
+        run: ls .terraform/modules/rg
         
       - name: Terraform Destroy Plan
         run: |
