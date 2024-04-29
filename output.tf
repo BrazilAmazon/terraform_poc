@@ -1,3 +1,3 @@
-output "appid" {
+output "appids" {
   value = module.rg
 }
