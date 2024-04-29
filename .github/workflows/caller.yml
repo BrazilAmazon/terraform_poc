@@ -1,97 +1,32 @@
-name: Terraform CD
+name: manipulate TeamTokens
 
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        type: environment
-      terraform_working_directory:
-        type: string
-        default: .
-        description: 'Terraform working directory'
-      Destroy:
+      Team: 
         type: choice
         required: true
-        description: 'Choose to destroy -- If you select "targetmodules", you must provide Target_Destroy field. If you select "tfstate", leave the "Target_Destroy" field empty.'
+        description: choose Team to RUN
         options:
-          - targetmodules
-          - tfstate
-      Target_Destroy:
-        description: 'Target_Destroy -- Provide target delete modules like: module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example'
-        type: string
-        required: false
+          - Dev_Team
 
 jobs:
-  prep:
+  TeamTokens:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
-    outputs:
-      #az_subscription_id: ${{ steps.set_env.outputs.az_subscription_id }}
-      #az_client_id: ${{ steps.set_env.outputs.az_client_id }}
-      #az_client_secret: ${{ steps.set_env.outputs.az_client_secret }}
-      tf_workspace: ${{ steps.set_env.outputs.tf_workspace }}
-      tf_version: ${{ steps.set_env.outputs.tf_version }}
     steps:
-      - name: Set Current Environment
-        id: set_env
+      - name: set team token
+        id: tf_team_token
         run: |
-          current_env=${{ github.event.inputs.environment }}
-          echo "Current Environment is $current_env"
-
-          echo "Read $current_env variables..."
-          echo "tf_workspace=${{vars.TF_WORKSPACE}}" >> $GITHUB_OUTPUT
-
-          echo "Read Organization variables..."
-          if [ "$current_env" = "sandbox" ]; then
-            echo "Fetching vars for sandbox.." 
-            echo "az_subscription_id=${{vars.AZURE_SUBSCRIPTION_ID_SANDBOX}}" >> $GITHUB_OUTPUT
-            echo "az_client_id=${{vars.TF_AZURE_CLIENT_ID_SANDBOX}}" >> $GITHUB_OUTPUT
-            echo "az_client_secret=${{secrets.TF_AZURE_CLIENT_SECRET_SANDBOX}}" >> $GITHUB_OUTPUT
-            echo "tf_version=${{vars.TF_VERSION_DEV}}" >> $GITHUB_OUTPUT
-          elif [ "$current_env" = "qa" ]; then
-            echo "Fetching vars for qa.."
-            echo "az_subscription_id=${{vars.AZURE_SUBSCRIPTION_ID_QA}}" >> $GITHUB_OUTPUT
-            echo "az_client_id=${{vars.TF_AZURE_CLIENT_ID_QA}}" >> $GITHUB_OUTPUT
-            echo "az_client_secret=${{secrets.TF_AZURE_CLIENT_SECRET_QA}}" >> $GITHUB_OUTPUT
-            echo "tf_version=${{vars.TF_VERSION_DEV}}" >> $GITHUB_OUTPUT
-          elif [ "$current_env" = "demo" ]; then
-            echo "Fetching vars for demo.."
-            echo "az_subscription_id=${{vars.AZURE_SUBSCRIPTION_ID_DEMO}}" >> $GITHUB_OUTPUT
-            echo "az_client_id=${{vars.TF_AZURE_CLIENT_ID_DEMO}}" >> $GITHUB_OUTPUT
-            echo "az_client_secret=${{secrets.TF_AZURE_CLIENT_SECRET_DEMO}}" >> $GITHUB_OUTPUT
-            echo "tf_version=${{vars.TF_VERSION_PROD}}" >> $GITHUB_OUTPUT
-          elif [ "$current_env" = "prod" ]; then
-            echo "Fetching vars for prod.."
-            echo "az_subscription_id=${{vars.AZURE_SUBSCRIPTION_ID_PROD}}" >> $GITHUB_OUTPUT
-            echo "az_client_id=${{vars.TF_AZURE_CLIENT_ID_PROD}}" >> $GITHUB_OUTPUT
-            echo "az_client_secret=${{secrets.TF_AZURE_CLIENT_SECRET_PROD}}" >> $GITHUB_OUTPUT
-            echo "tf_version=${{vars.TF_VERSION_PROD}}" >> $GITHUB_OUTPUT
-          else
-            echo "No environment found"
-            echo "Fetching vars for dev.."
-            echo "az_subscription_id=${{vars.AZURE_SUBSCRIPTION_ID_DEV}}" >> $GITHUB_OUTPUT
-            echo "az_client_id=${{vars.TF_AZURE_CLIENT_ID_DEV}}" >> $GITHUB_OUTPUT
-            echo "az_client_secret=${{secrets.TF_AZURE_CLIENT_SECRET_DEV}}" >> $GITHUB_OUTPUT
-            echo "tf_version=${{vars.TF_VERSION_DEV}}" >> $GITHUB_OUTPUT
-          fi
-
-  terraform_cd:
-    needs: prep
-    uses: ddi1225-IAC/platform_shared/.github/workflows/terraform_cd_base.yml@release
-    secrets: 
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN_PLATFORM }} #org
-      #AZURE_CLIENT_SECRET: ${{ needs.prep.outputs.az_client_secret }}
-    with: 
-      environment: ${{ inputs.environment }}
-      github_runner: "ubuntu-latest"
-      terraform_working_directory: ${{ inputs.terraform_working_directory }}
-      tf_version: ${{ needs.prep.outputs.tf_version }}
-      tf_cloud_organization: ${{ vars.TF_CLOUD_ORGANIZATION }} #org
-      tf_cloud_hostname: ${{ vars.TF_CLOUD_HOSTNAME }} #org
-      tf_cloud_project: ${{ vars.TF_CLOUD_PROJECT }} #repo
-      tf_workspace: ${{ needs.prep.outputs.tf_workspace }}
-      Destroy: ${{ inputs.Destroy }}
-      Target_Destroy: ${{ inputs.Target_Destroy }}
-      #az_subscription_id: ${{ needs.prep.outputs.az_subscription_id }}
-      #az_client_id: ${{ needs.prep.outputs.az_client_id }}
-      #az_tenant_id: ${{ vars.AZURE_TENANT_ID }} #org
+          echo "Hello-world"
+  Platform_Team:
+    needs: TeamTokens
+    uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
+    with:
+      TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+      TF_CLOUD_HOSTNAME: ${{ vars.TF_CLOUD_HOSTNAME }}
+      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+      Tf_Destroy: ${{ inputs.Destroy }}
+    secrets:
+      ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+      TF_API_TOKEN: ${{ inputs.Team == 'Platform_Team' &&  secrets.TF_API_TOKEN || inputs.Team == 'Dev_Team' &&  secrets.TF_API_TOKEN_DEV_TEAM || inputs.Team == 'System_Team' &&  secrets.TF_API_TOKEN_SYSTEM_TEAM }}
+      
