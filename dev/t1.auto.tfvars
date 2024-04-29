@@ -1,3 +1,3 @@
 rgname = "trraformpoc"
-rglocation = "eastus"
+rglocation = "northeurope"
 
