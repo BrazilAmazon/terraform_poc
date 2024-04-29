@@ -1,3 +1,3 @@
 output "app_id" {
-  value = module.rg.rgname
+  value = { for k, v in module.rg : k => v.app_id }
 }
