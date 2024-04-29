@@ -1,3 +1,3 @@
-output "appids" {
+output "rgnames" {
   value = module.rg
 }
