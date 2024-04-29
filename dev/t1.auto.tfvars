@@ -1,3 +1,3 @@
-rgname = "trraformpocaheyAbdulm"
+rgname = "trraformpoc"
 rglocation = "eastus"
 
