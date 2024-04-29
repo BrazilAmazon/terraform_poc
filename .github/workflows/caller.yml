@@ -12,12 +12,12 @@ on:
       Destroy:
         type: choice
         required: true
-        description: 'Choose to destroy. If you select "targetmodules", you must provide target delete modules. If you select "tfstate", leave the "Target_Destroy" field empty.'
+        description: 'Choose to destroy -- If you select "targetmodules", you must provide target delete modules. If you select "tfstate", leave the "Target_Destroy" field empty.'
         options:
           - targetmodules
           - tfstate
       Target_Destroy:
-        description: 'Target_Destroy: Provide target delete modules like: module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example'
+        description: 'Target_Destroy -- Provide target delete modules like: module.rg.azurerm_resource_group.rg module.rg.azurerm_service_plan.example'
         type: string
         required: false
 
