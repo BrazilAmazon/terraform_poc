@@ -20,6 +20,7 @@ on:
         description: 'Provide target delete modules like: module.rg.azurerm_resource_group.rg, module.rg.azurerm_service_plan.example'
         type: string
         required: false
+
 jobs:
   prep:
     runs-on: ubuntu-latest
@@ -72,8 +73,8 @@ jobs:
             echo "az_client_id=${{vars.TF_AZURE_CLIENT_ID_DEV}}" >> $GITHUB_OUTPUT
             echo "az_client_secret=${{secrets.TF_AZURE_CLIENT_SECRET_DEV}}" >> $GITHUB_OUTPUT
             echo "tf_version=${{vars.TF_VERSION_DEV}}" >> $GITHUB_OUTPUT
-
           fi
+
   terraform_cd:
     needs: prep
     uses: ddi1225-IAC/platform_shared/.github/workflows/terraform_cd_base.yml@release
@@ -92,5 +93,3 @@ jobs:
       #az_subscription_id: ${{ needs.prep.outputs.az_subscription_id }}
       #az_client_id: ${{ needs.prep.outputs.az_client_id }}
       #az_tenant_id: ${{ vars.AZURE_TENANT_ID }} #org
-	  
-
