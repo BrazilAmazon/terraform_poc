@@ -48,6 +48,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+
+      - name: check
+        run: ls
         
       - name: Terraform Destroy Plan
         run: |
