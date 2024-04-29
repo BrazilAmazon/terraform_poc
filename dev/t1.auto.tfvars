@@ -1,3 +1,3 @@
 rgname = "trraformpoc1"
-rglocation = "eastus2"
+rglocation = "centralindia"
 
