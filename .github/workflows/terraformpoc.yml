@@ -96,6 +96,7 @@ jobs:
           path: tfplan
 
   apply:
+    needs: ['terraform']
     name: "apply"
     runs-on: ubuntu-latest
     steps:
