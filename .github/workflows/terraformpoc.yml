@@ -36,6 +36,8 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -53,6 +55,7 @@ jobs:
         run: ls .terraform/modules/rg
         
       - name: Terraform Destroy Plan
+        id: tf-plan
         run: |
         
             echo "------------------------------------------"
@@ -113,6 +116,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
          name: tfplan
+      - name: print ouputs 
+        run: echo "This is from job1 --- ${{ needs.terraform.outputs.tfplanExitCode }}"
          
       - name: Terraform Init
         run: terraform init
