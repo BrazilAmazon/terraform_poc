@@ -37,7 +37,7 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     outputs:
-      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+      tfplanExitCode: ${{ steps.tf-plan-string.outputs.exitcode }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -92,8 +92,12 @@ jobs:
                       exit 0
                     fi
             fi
-      - name: terraform plan show
-        run: terraform show -no-color tfplan
+      - name: Create String Output
+        id: tf-plan-string
+        run: |
+          export exitcode=0
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+          $TERRAFORM_PLAN | grep -q 'No changes. Your infrastructure matches the configuration.' && echo "exitcode=2" >> $GITHUB_OUTPUT
         
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
