@@ -97,7 +97,8 @@ jobs:
         run: |
           export exitcode=0
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
-          $TERRAFORM_PLAN | grep -q 'No changes. Your infrastructure matches the configuration.' && echo "exitcode=2" >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.' && export exitcode=2
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
