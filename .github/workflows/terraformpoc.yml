@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-   
+       
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -95,13 +95,12 @@ jobs:
       - name: Create String Output
         id: tf-plan-string
         run: |
-          export ContinueTerraformApply=False
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
           if echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.'
           then
-            export ContinueTerraformApply=False
+            export ContinueTerraformApply=0
           else
-            export ContinueTerraformApply=True
+            export ContinueTerraformApply=1
           fi
           echo "ContinueTerraformApply=$ContinueTerraformApply" >> $GITHUB_OUTPUT
         
@@ -115,7 +114,7 @@ jobs:
     needs: ['terraform']
     name: "apply"
     runs-on: ubuntu-latest
-    if:  needs.terraform.outputs.ContinueTerraformApply == True
+    if:  needs.terraform.outputs.ContinueTerraformApply == 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
