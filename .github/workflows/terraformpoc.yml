@@ -95,7 +95,6 @@ jobs:
       - name: Create String Output
         id: tf-plan-string
         run: |
-          export exitcode=0
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
           echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.' && export exitcode=2
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
