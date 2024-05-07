@@ -37,7 +37,7 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     outputs:
-      tfplanExitCode: ${{ steps.tf-plan-string.outputs.exitcode }}
+      ContinueTerraformApply: ${{ steps.tf-plan-string.outputs.ContinueTerraformApply }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -96,8 +96,13 @@ jobs:
         id: tf-plan-string
         run: |
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
-          echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.' && export exitcode=2
-          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+          if echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.'
+          then
+            export ContinueTerraformApply=False
+          else
+            export ContinueTerraformApply=True
+          fi
+          echo "ContinueTerraformApply=$ContinueTerraformApply" >> $GITHUB_OUTPUT
         
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
@@ -109,7 +114,7 @@ jobs:
     needs: ['terraform']
     name: "apply"
     runs-on: ubuntu-latest
-    if:  needs.terraform.outputs.tfplanExitCode == 2
+    if:  needs.terraform.outputs.ContinueTerraformApply == True
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -125,7 +130,7 @@ jobs:
         with:
          name: tfplan
       - name: print ouputs 
-        run: echo "This is from job1 --- ${{ needs.terraform.outputs.tfplanExitCode }}"
+        run: echo "This is from job1 --- ${{ needs.terraform.outputs.ContinueTerraformApply }}"
          
       - name: Terraform Init
         run: terraform init
