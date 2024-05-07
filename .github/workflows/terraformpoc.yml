@@ -92,6 +92,9 @@ jobs:
                       exit 0
                     fi
             fi
+      - name: terraform plan show
+        run: terraform show -no-color tfplan
+        
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
         with:
