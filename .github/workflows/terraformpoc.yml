@@ -95,6 +95,7 @@ jobs:
       - name: Create String Output
         id: tf-plan-string
         run: |
+          export ContinueTerraformApply=False
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
           if echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.'
           then
@@ -114,7 +115,7 @@ jobs:
     needs: ['terraform']
     name: "apply"
     runs-on: ubuntu-latest
-    if:  needs.terraform.outputs.ContinueTerraformApply == "True"
+    if:  needs.terraform.outputs.ContinueTerraformApply == True
     steps:
       - name: Checkout
         uses: actions/checkout@v3
