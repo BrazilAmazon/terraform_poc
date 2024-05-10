@@ -2,7 +2,7 @@ import time
 
 import requests, json, sys
 
-Github_PAT = sys.argv[1] #{sys.argv[1]}
+Github_PAT = sys.argv[1]  #{sys.argv[1]}
 owner = "BrazilAmazon"
 repo = "terraform_poc"
 assignees = ["Abdulk777"]
@@ -74,16 +74,20 @@ def UpdateIssue():
 
 
 TerraformApplyContinue = 0
+Github_Outputs = []
 while 1:
     GetIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}/comments"
     GetIssue = requests.get(GetIssueForApproval,headers=headers(token=Github_PAT))
     #print(GetIssue.json())
     if len(GetIssue.json()) <=0:
         #print(f"Waiting For Approval -- Check With {assignees}")
+        Github_Outputs.append(f"Waiting For Approval -- Check With {assignees}")
         continue
     elif len(GetIssue.json()) >=1:
         objs = len(GetIssue.json())
         #print(f"Waiting For Approval -- Check With {assignees}")
+        Github_Outputs.append(f"Waiting For Approval -- Check With {assignees}")
+        Github_Outputs.append(f"Issue Comment -- {GetIssue.json()[objs-1]['body']}")
         #print(f"Issue Comment -- {GetIssue.json()[objs-1]['body']}")
         commentbody = GetIssue.json()[objs-1]['body']
         if str(commentbody).lower() == "approved" or str(commentbody).lower() == "approve":
@@ -96,6 +100,7 @@ while 1:
             if IssueNumner.json()['state'] == "open":
                 UpdateIssue()
             break
-    time.sleep(2)
+    time.sleep(3)
 
-print(TerraformApplyContinue)
+Github_Outputs.append(TerraformApplyContinue)
+print(Github_Outputs)
