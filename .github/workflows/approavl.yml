@@ -12,6 +12,10 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
     needs: build
     steps:
       - uses: trstringer/manual-approval@v1
