@@ -12,15 +12,11 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      repository-projects: write
     needs: build
     steps:
       - uses: trstringer/manual-approval@v1
         with:
-          secret: ${{ github.TOKEN }}
+          secret: ${{ secrets.TOKEN }}
           approvers: trstringer,acdunnigan
       - name: Deploy to production
         run: echo deploying
