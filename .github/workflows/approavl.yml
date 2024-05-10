@@ -24,6 +24,6 @@ jobs:
 
       - name: execute py script # run file
         run: |
-          python my_file.py
+          python my_file.py Abdul
       - name: Deploy to production
         run: echo deploying
