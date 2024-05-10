@@ -21,7 +21,7 @@ jobs:
           ls
       - name: execute py script # run file
         run: |
-          $Output=$(python my_file.py Abdul kahadar)
+          Output=$(python my_file.py Abdul kahadar)
           echo "::set-output name=TEST::$Output"
       - name: print env
         run: echo $TEST
