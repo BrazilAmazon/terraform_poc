@@ -79,11 +79,12 @@ while 1:
     GetIssue = requests.get(GetIssueForApproval,headers=headers(token=Github_PAT))
     #print(GetIssue.json())
     if len(GetIssue.json()) <=0:
-        print(f"Waiting For Approval -- Check With {assignees}")
+        #print(f"Waiting For Approval -- Check With {assignees}")
+        continue
     elif len(GetIssue.json()) >=1:
         objs = len(GetIssue.json())
-        print(f"Waiting For Approval -- Check With {assignees}")
-        print(f"Issue Comment -- {GetIssue.json()[objs-1]['body']}")
+        #print(f"Waiting For Approval -- Check With {assignees}")
+        #print(f"Issue Comment -- {GetIssue.json()[objs-1]['body']}")
         commentbody = GetIssue.json()[objs-1]['body']
         if str(commentbody).lower() == "approved" or str(commentbody).lower() == "approve":
             TerraformApplyContinue = 1
@@ -95,6 +96,6 @@ while 1:
             if IssueNumner.json()['state'] == "open":
                 UpdateIssue()
             break
-    time.sleep(3)
+    time.sleep(2)
 
 print(TerraformApplyContinue)
