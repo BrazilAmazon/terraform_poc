@@ -21,7 +21,7 @@ jobs:
       - name: execute py script
         id: code
         run: |
-          Output=$(python my_file.py "${{ secrets.TOKEN }}")
+          echo Output=$(python my_file.py "${{ secrets.TOKEN }}")
           echo "TEST=$Output" >> $GITHUB_OUTPUT
       - name: print env
         run: echo "${{ steps.code.outputs.TEST }}"
