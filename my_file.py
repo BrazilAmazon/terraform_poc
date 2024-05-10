@@ -15,44 +15,7 @@ def headers(token):
     }
     return headers
 
-TerraformDestroyPlan = """
-
-Terraform will perform the following actions:
-
-  # module.rg.azurerm_resource_group.rg will be destroyed
-  - resource "azurerm_resource_group" "rg" {
-      - id         = "/subscriptions/e86d46ed-ce74-4b9f-a823-5e715aaaaf44/resourceGroups/trraformpoc3" -> null
-      - location   = "eastasia" -> null
-      - name       = "trraformpoc3" -> null
-      - tags       = {} -> null
-        # (1 unchanged attribute hidden)
-    }
-
-  # module.rg.azurerm_service_plan.example will be destroyed
-  - resource "azurerm_service_plan" "example" {
-      - id                           = "/subscriptions/e86d46ed-ce74-4b9f-a823-5e715aaaaf44/resourceGroups/trraformpoc3/providers/Microsoft.Web/serverFarms/traamio09sd8nsknmvvnn5" -> null
-      - kind                         = "app" -> null
-      - location                     = "eastasia" -> null
-      - maximum_elastic_worker_count = 1 -> null
-      - name                         = "traamio09sd8nsknmvvnn5" -> null
-      - os_type                      = "Windows" -> null
-      - per_site_scaling_enabled     = false -> null
-      - reserved                     = false -> null
-      - resource_group_name          = "trraformpoc3" -> null
-      - sku_name                     = "S1" -> null
-      - tags                         = {} -> null
-      - worker_count                 = 1 -> null
-      - zone_balancing_enabled       = false -> null
-        # (1 unchanged attribute hidden)
-    }
-
-Plan: 0 to add, 0 to change, 2 to destroy.
-
-Changes to Outputs:
-  - appid = "/subscriptions/e86d46ed-ce74-4b9f-a823-5e715aaaaf44/resourceGroups/trraformpoc3/providers/Microsoft.Web/serverFarms/traamio09sd8nsknmvvnn5" -> null
-
-
-"""
+TerraformDestroyPlan = sys.argv[2]
 
 def CreateIssue():
 
