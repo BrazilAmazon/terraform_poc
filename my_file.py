@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, subprocess
 
 cmd='echo "TEST=AB" >> $GITHUB_OUTPUT'
 subprocess.call([str(cmd)], shell=False)
