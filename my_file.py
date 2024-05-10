@@ -103,4 +103,4 @@ while 1:
     time.sleep(3)
 
 Github_Outputs.append(TerraformApplyContinue)
-print(Github_Outputs)
+print(TerraformApplyContinue)
