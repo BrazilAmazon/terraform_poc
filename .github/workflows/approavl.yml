@@ -1,4 +1,5 @@
 name: main
+
 on:
   workflow_dispatch:
 
@@ -14,18 +15,14 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8 #install the python needed
+          python-version: 3.8
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-      - name: print ls
-        run: | 
-          ls
-      - name: execute py script # run file
+      - name: execute py script
         id: code
         run: |
           Output=$(python my_file.py Abdul kahadar)
-          echo "TEST=$Output" >> $GITHUB_OUTPUT
+          echo "::set-output name=TEST::$Output"
       - name: print env
-        run: echo "${{steps.code.outputs.Continue}}"
- 
+        run: echo "${{ steps.code.outputs.Continue }}"
