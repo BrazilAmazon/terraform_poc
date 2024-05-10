@@ -24,5 +24,5 @@ jobs:
           Output=$(python my_file.py Abdul kahadar)
           echo "::set-output name=TEST::$Output"
       - name: print env
-        run: echo $TEST
+        run: echo "${{ steps.step1.outputs.TEST }}"
  
