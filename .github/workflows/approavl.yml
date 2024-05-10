@@ -23,8 +23,7 @@ jobs:
           python -m pip install --upgrade pip
       - name: print ls
         run: | 
-          ls 
-          $pwd
+          ls -la
       - name: execute py script # run file
         run: |
           python my_file.py Abdul
