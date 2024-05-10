@@ -24,5 +24,5 @@ jobs:
           Output=$(python my_file.py Abdul kahadar)
           echo "TEST=$Output" >> $GITHUB_OUTPUT
       - name: print env
-        run: echo "$GITHUB_OUTPUT"
+        run: echo "$TEST"
  
