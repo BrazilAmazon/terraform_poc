@@ -23,5 +23,5 @@ jobs:
         run: |
           python my_file.py Abdul kahadar
       - name: print env
-        run: echo $Test
+        run: echo $TEST
  
