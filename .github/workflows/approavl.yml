@@ -21,6 +21,7 @@ jobs:
       - name: execute py script
         id: code
         run: |
+          python my_file.py
           Output=$(python -u my_file.py "${{ secrets.TOKEN }}" "TerraformDestroyPLan")
           echo "TEST=$Output" >> $GITHUB_OUTPUT
       - name: print env
