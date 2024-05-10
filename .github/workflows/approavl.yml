@@ -21,7 +21,7 @@ jobs:
           ls
       - name: execute py script # run file
         run: |
-          python my_file.py Abdul
+          python my_file.py Abdul kahadar
       - name: Deploy to production
         run: echo deploying
  
