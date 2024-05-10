@@ -7,13 +7,6 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - name: Build
-        run: echo building
-  deploy:
-    name: deploy
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: setup python
         uses: actions/setup-python@v2
         with:
@@ -29,3 +22,4 @@ jobs:
           python my_file.py Abdul
       - name: Deploy to production
         run: echo deploying
+ 
