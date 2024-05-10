@@ -7,8 +7,6 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    outputs:
-      Continue: ${{ steps.code.outputs.TEST }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,6 +21,6 @@ jobs:
         id: code
         run: |
           Output=$(python my_file.py Abdul kahadar)
-          echo "$Output" >> $GITHUB_OUTPUT
+          echo "TEST=$Output" >> $GITHUB_OUTPUT
       - name: print env
-        run: echo "${{ steps.code.outputs.Continue }}"
+        run: echo "${{ steps.code.outputs.TEST }}"
