@@ -1,20 +1,7 @@
 name: main
 on:
   workflow_dispatch:
-permissions:
-  actions: write
-  checks: write
-  contents: write
-  deployments: write
-  discussions: write
-  issues: write
-  pages: read
-  packages: write
-  statuses: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  id-token: write
+
 jobs:
   build:
     name: build
@@ -30,6 +17,6 @@ jobs:
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ secrets.TOKEN }}
-          approvers: trstringer,acdunnigan
+          approvers: Abdulk777
       - name: Deploy to production
         run: echo deploying
