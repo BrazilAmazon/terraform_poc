@@ -1,2 +1,2 @@
 import sys
-print("hey this is from command line arg---{sys.argv[1]}")
+print(f"hey this is from command line arg---{{sys.argv[1]}}")
