@@ -37,7 +37,7 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     outputs:
-      ContinueTerraformApply: ${{ steps.tf-plan-string.outputs.ContinueTerraformApply }}
+      ContinueToApprovals: ${{ steps.tf-plan-string.outputs.ContinueToApprovals }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -98,11 +98,11 @@ jobs:
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
           if echo "$TERRAFORM_PLAN" | grep -q 'No changes. Your infrastructure matches the configuration.'
           then
-            export ContinueTerraformApply=0
+            export ContinueToApprovals=0
           else
-            export ContinueTerraformApply=1
+            export ContinueToApprovals=1
           fi
-          echo "ContinueTerraformApply=$ContinueTerraformApply" >> $GITHUB_OUTPUT
+          echo "ContinueToApprovals=$ContinueToApprovals" >> $GITHUB_OUTPUT
         
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
@@ -110,11 +110,37 @@ jobs:
           name: tfplan
           path: tfplan
 
-  apply:
+  Approvals:
+    name: Approvals
     needs: ['terraform']
+    runs-on: ubuntu-latest
+    outputs:
+      ContinueTerraformApply: ${{ steps.tf-plan-string.outputs.ContinueTerraformApply }}
+    if:  needs.terraform.outputs.ContinueToApprovals == 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests
+      - name: execute py script
+        run: |
+          python my_file.py "${{ secrets.TOKEN }}" "TerraformDestroyPLan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: print env
+        id: tf-plan-string
+        run: |
+          TerraformApplyContinue="${{ steps.code.outputs.TerraformApplyContinue }}" >> $GITHUB_OUTPUT
+
+  apply:
+    needs: ['Approvals']
     name: "apply"
     runs-on: ubuntu-latest
-    if:  needs.terraform.outputs.ContinueTerraformApply == 1
+    if:  needs.Approvals.outputs.ContinueTerraformApply == 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
