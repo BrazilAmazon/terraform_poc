@@ -115,7 +115,7 @@ jobs:
     needs: ['terraform']
     runs-on: ubuntu-latest
     outputs:
-      ContinueTerraformApply: ${{ steps.tf-plan-string.outputs.ContinueTerraformApply }}
+      TerraformApplyContinue: ${{ steps.tf-plan-string.outputs.TerraformApplyContinue }}
     if: needs.terraform.outputs.ContinueToApprovals == 1
     steps:
       - name: Checkout
@@ -140,7 +140,7 @@ jobs:
     needs: ['Approvals']
     name: "apply"
     runs-on: ubuntu-latest
-    if:  needs.Approvals.outputs.ContinueTerraformApply == 1
+    if:  needs.Approvals.outputs.TerraformApplyContinue == 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
