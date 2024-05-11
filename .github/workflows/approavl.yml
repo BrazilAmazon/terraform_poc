@@ -4,8 +4,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  check:
     name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: hey
+        run: echo "hello world"
+  build:
+    needs: ['check']
+    name: approval
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
