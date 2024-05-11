@@ -4,10 +4,6 @@ import requests, json, sys, time, os
 def IssueDescription(plan,url):
     approvalbody = """
     
-    
-    
-    -----------
-    
     ***Terraform Approval and Cancel Instructions***
     **Valid Approve Comments are _"Approved"_, _"Approve"_, _"approved"_, _"approve"_ to Continue the Terraform Destroy Apply**
     **Valid Dis-Approve or Cancel Comments are _"Denied"_, _"Deny"_, _"denied"_, _"deny"_ to Cancel the Terraform Destroy Apply**
@@ -24,8 +20,8 @@ def IssueDescription(plan,url):
 Github_PAT = sys.argv[1] #{sys.argv[1]}
 owner = "BrazilAmazon"
 repo = "terraform_poc"
-assignees = {"Abdul007k","Abdulk777"}
-temp_assignees = ["Abdul007k","Abdulk777"]
+assignees = {"Abdulk777"}
+temp_assignees = ["Abdulk777"]
 def headers(token):
     headers = {
         "accept" : "application/vnd.github+json",
@@ -38,7 +34,7 @@ Description = IssueDescription(plan=sys.argv[2],url=sys.argv[3])
 def CreateIssue():
 
     CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-    body = {"title":f"Terraform Approval Run ID:{sys.argv[4]}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
+    body = {"title":f"Terraform Approval Run ID:{sys.argv[4]}","body":f"{Description}.","assignees":["Abdulk777"],"labels":["Terraform Approval"]}
     CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
 
     return CreateIssue
@@ -48,7 +44,7 @@ IssueNumner = CreateIssue()
 def UpdateIssue():
 
     UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-    body = {"title":f"Terraform Approval Run ID:{sys.argv[4]}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+    body = {"title":f"Terraform Approval Run ID:{sys.argv[4]}","body":f"{Description}.","assignees":["Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
     UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
 
     return UpdateIssue_State
