@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ContinueToApprovals: ${{ steps.tf-plan-string.outputs.ContinueToApprovals }}
-      Terraformdestroyplan: ${{ steps.tf-plan-string.outputs.Terraformdestroyplan }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -107,7 +107,7 @@ jobs:
             export ContinueToApprovals=1
           fi
           echo "ContinueToApprovals=$ContinueToApprovals" >> $GITHUB_OUTPUT
-          echo 'Terraformdestroyplan=$(terraform show -no-color tfplan)' >> $GITHUB_OUTPUT
+    
 
         
       - name: Publish Artifact - Terraform Plan
@@ -152,7 +152,7 @@ jobs:
       - name: execute py script
         id: continuerun
         run: |
-          python my_file.py "$GithubToken" "${{ needs.terraform.outputs.Terraformdestroyplan }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
+          python my_file.py "$GithubToken" "$(terraform show -no-color tfplan)" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
 
 
   apply:
