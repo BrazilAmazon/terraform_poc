@@ -9,7 +9,7 @@ def IssueDescription(plan,url):
     """
     Github_RUN_Url = f"Github Run Url -- {url}"
     
-    IssueDescription = f"{plan}                -----------------------     {approvalbody}                -----------------------      {url}"
+    IssueDescription = f"{plan}                -----------------------     {approvalbody}                -----------------------      {Github_RUN_Url}"
     return IssueDescription
     
 
