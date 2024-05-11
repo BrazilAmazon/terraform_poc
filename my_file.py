@@ -57,7 +57,7 @@ def UpdateIssue():
 TerraformApplyContinue = 0
 Approvers_list = set()
 while 1:
-    GetIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}/comments"
+    GetIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues/63/comments"
     GetIssue = requests.get(GetIssueForApproval,headers=headers(token=Github_PAT))
     #print(GetIssue.json())
     if len(GetIssue.json()) <=0:
