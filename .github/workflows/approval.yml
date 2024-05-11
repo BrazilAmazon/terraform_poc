@@ -117,6 +117,8 @@ jobs:
     name: Approvals
     needs: ['terraform']
     runs-on: ubuntu-latest
+    outputs:
+      TerraformApplyContinue: ${{ steps.continuerun.outputs.TerraformApplyContinue }}
     if: needs.terraform.outputs.ContinueToApprovals == 1
     steps:
       - name: Checkout
@@ -130,12 +132,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install requests
       - name: execute py script
+        id: continuerun
         run: |
           python my_file.py "$GithubToken" "terraformplan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
-      - name: print env
-        id: tf-plan-string
-        run: |
-          echo "${{steps.outputs.TerraformApplyContinue}}"
+
 
   apply:
     needs: ['Approvals']
