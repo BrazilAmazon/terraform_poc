@@ -17,6 +17,8 @@ on:
         required: true
         type: string
     secrets:
+      Github_Token:
+       required: true
       TF_API_TOKEN:
        required: true
       
@@ -130,7 +132,7 @@ jobs:
           python -m pip install requests
       - name: execute py script
         run: |
-          python my_file.py "${{ secrets.TOKEN }}" "terraformplan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
+          python my_file.py "${{ secrets.Github_Token }}" "terraformplan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
       - name: print env
         id: tf-plan-string
         run: |
