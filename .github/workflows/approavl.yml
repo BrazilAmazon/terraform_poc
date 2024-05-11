@@ -22,7 +22,5 @@ jobs:
         id: code
         run: |
           python my_file.py "${{ secrets.TOKEN }}" "TerraformDestroyPLan"
-          #print flush
-          #with open githuboutput
       - name: print env
-        run: echo "${{ steps.code.outputs.my_name }}"
+        run: echo "${{ steps.code.outputs.TerraformApplyContinue }}"
