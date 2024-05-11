@@ -1,5 +1,21 @@
 import requests, json, sys, time, os
 
+
+def IssueDescription(plan,url):
+    approvalbody = """
+    ## Terraform Approval and Cancel Instructions
+    ** Valid Approve Comments are _"Approved", "Approve", "approved", "approve"_ to Continue the Terraform Destroy Apply **
+    ** Valid Dis-Approve or Cancel Comments are _"Denied", "Deny", "denied", "deny"_ to Cancel the Terraform Destroy Apply **
+    """
+    Github_RUN_Url = f"{url}"
+    
+    IssueDescription = f"{plan}                -----------------------     {approvalbody}                -----------------------      {url}"
+    return IssueDescription
+    
+
+
+
+
 Github_PAT = sys.argv[1] #{sys.argv[1]}
 owner = "BrazilAmazon"
 repo = "terraform_poc"
@@ -13,11 +29,11 @@ def headers(token):
     }
     return headers
 
-TerraformDestroyPlan = sys.argv[2]
+Description = IssueDescription(plan=sys.argv[2],url=sys.argv[3])
 def CreateIssue():
 
     CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-    body = {"title":"Found a bug","body":f"{TerraformDestroyPlan}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
+    body = {"title":"Found a bug","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
     CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
 
     return CreateIssue
@@ -27,7 +43,7 @@ IssueNumner = CreateIssue()
 def UpdateIssue():
 
     UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-    body = {"title":"Found a bug","body":f"{TerraformDestroyPlan}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+    body = {"title":"Found a bug","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
     UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
 
     return UpdateIssue_State
@@ -69,3 +85,5 @@ name = 'TerraformApplyContinue'
 value = TerraformApplyContinue
 with open(os.environ['GITHUB_OUTPUT'], 'a') as TAC:
     print(f'{name}={value}', file=TAC)
+
+
