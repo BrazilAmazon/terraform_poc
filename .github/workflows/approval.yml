@@ -117,8 +117,6 @@ jobs:
     name: Approvals
     needs: ['terraform']
     runs-on: ubuntu-latest
-    outputs:
-      TerraformApplyContinue: ${{ steps.tf-plan-string.outputs.TerraformApplyContinue }}
     if: needs.terraform.outputs.ContinueToApprovals == 1
     steps:
       - name: Checkout
@@ -137,7 +135,7 @@ jobs:
       - name: print env
         id: tf-plan-string
         run: |
-          TerraformApplyContinue="${{ steps.code.outputs.TerraformApplyContinue }}" >> $GITHUB_OUTPUT
+          echo "$TerraformApplyContinue"
 
   apply:
     needs: ['Approvals']
