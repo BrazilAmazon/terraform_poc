@@ -20,7 +20,7 @@ jobs:
           echo "Hello-world"
   Platform_Team:
     needs: TeamTokens
-    uses: BrazilAmazon/terraform_poc/.github/workflows/terraformpoc.yml@main
+    uses: BrazilAmazon/terraform_poc/.github/workflows/approval.yml@main
     with:
       TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
       TF_CLOUD_HOSTNAME: ${{ vars.TF_CLOUD_HOSTNAME }}
