@@ -3,20 +3,20 @@ import requests, json, sys, time, os
 
 def IssueDescription(plan,url):
     approvalbody = """
-    ## Terraform Approval and Cancel Instructions
-    ** Valid Approve Comments are _"Approved", "Approve", "approved", "approve"_ to Continue the Terraform Destroy Apply **
-    ** Valid Dis-Approve or Cancel Comments are _"Denied", "Deny", "denied", "deny"_ to Cancel the Terraform Destroy Apply **
+    ##Terraform Approval and Cancel Instructions
+    **Valid Approve Comments are _"Approved"_, _"Approve"_, _"approved"_, _"approve"_ to Continue the Terraform Destroy Apply**
+    **Valid Dis-Approve or Cancel Comments are _"Denied"_, _"Deny"_, _"denied"_, _"deny"_ to Cancel the Terraform Destroy Apply**
     """
     Github_RUN_Url = f"Github Run Url -- {url}"
-    
-    IssueDescription = f"{plan}                -----------------------     {approvalbody}                -----------------------      {Github_RUN_Url}"
+
+    IssueDescription = f"{plan}-{approvalbody}-{Github_RUN_Url}"
     return IssueDescription
-    
 
 
 
 
-Github_PAT = sys.argv[1] #{sys.argv[1]}
+
+Github_PAT = sys.argv[1]  #{sys.argv[1]}
 owner = "BrazilAmazon"
 repo = "terraform_poc"
 assignees = {"Abdul007k","Abdulk777"}
@@ -85,5 +85,3 @@ name = 'TerraformApplyContinue'
 value = TerraformApplyContinue
 with open(os.environ['GITHUB_OUTPUT'], 'a') as TAC:
     print(f'{name}={value}', file=TAC)
-
-
