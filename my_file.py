@@ -1,10 +1,10 @@
 import requests, json, sys, time, os
 
-Github_PAT = sys.argv[1]  #{sys.argv[1]}
+Github_PAT = sys.argv[1] #{sys.argv[1]}
 owner = "BrazilAmazon"
 repo = "terraform_poc"
-assignees = ["Abdulk777"]
-
+assignees = {"Abdul007k","Abdulk777"}
+temp_assignees = ["Abdul007k","Abdulk777"]
 def headers(token):
     headers = {
         "accept" : "application/vnd.github+json",
@@ -17,7 +17,7 @@ TerraformDestroyPlan = sys.argv[2]
 def CreateIssue():
 
     CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-    body = {"title":"Found a bug","body":f"{TerraformDestroyPlan}.","assignees":["Abdulk777"],"labels":["Terraform Approval"]}
+    body = {"title":"Found a bug","body":f"{TerraformDestroyPlan}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
     CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
 
     return CreateIssue
@@ -27,39 +27,45 @@ IssueNumner = CreateIssue()
 def UpdateIssue():
 
     UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-    body = {"title":"Found a bug","body":f"{TerraformDestroyPlan}.","assignees":["Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+    body = {"title":"Found a bug","body":f"{TerraformDestroyPlan}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
     UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
 
     return UpdateIssue_State
 
 
 TerraformApplyContinue = 0
-
+Approvers_list = set()
 while 1:
     GetIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}/comments"
     GetIssue = requests.get(GetIssueForApproval,headers=headers(token=Github_PAT))
     #print(GetIssue.json())
     if len(GetIssue.json()) <=0:
-        print(f"Waiting For Approval -- Check With {assignees}", flush=True)
+        print(f"Waiting For Approval -- Check With {temp_assignees}", flush=True)
     elif len(GetIssue.json()) >=1:
         objs = len(GetIssue.json())
-        print(f"Waiting For Approval -- Check With {assignees}", flush=True)
-        print(f"Issue Comment -- {GetIssue.json()[objs-1]['body']}", flush=True)
+        print(f"Waiting For Approval -- Check With {temp_assignees}", flush=True)
         commentbody = GetIssue.json()[objs-1]['body']
-        if str(commentbody).lower() == "approved" or str(commentbody).lower() == "approve":
+        user = GetIssue.json()[objs-1]['user']['login']
+        if str(commentbody).lower() == "approved" or str(commentbody).lower() == "approve" and user in assignees:
             TerraformApplyContinue = 1
-            if IssueNumner.json()['state'] == "open":
-                UpdateIssue()
-            break
-        elif str(commentbody).lower() == "denied" or str(commentbody).lower() == "deny":
+            Approvers_list.add(user)
+            print(f"Issue Comment -- {GetIssue.json()[objs-1]['body']}--{Approvers_list}", flush=True)
+            try:
+              temp_assignees.remove(f"{user}")
+            except:
+                pass
+            if assignees == Approvers_list:
+                if IssueNumner.json()['state'] == "open":
+                    UpdateIssue()
+                break
+        elif str(commentbody).lower() == "denied" or str(commentbody).lower() == "deny" and user in assignees:
             TerraformApplyContinue = 2
             if IssueNumner.json()['state'] == "open":
                 UpdateIssue()
             break
-    time.sleep(5)
+    time.sleep(3)
 
 name = 'TerraformApplyContinue'
 value = TerraformApplyContinue
 with open(os.environ['GITHUB_OUTPUT'], 'a') as TAC:
     print(f'{name}={value}', file=TAC)
-
