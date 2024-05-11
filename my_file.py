@@ -56,7 +56,7 @@ while 1:
             if IssueNumner.json()['state'] == "open":
                 UpdateIssue()
             break
-    time.sleep(3)
+    time.sleep(5)
 
 name = 'TerraformApplyContinue'
 value = TerraformApplyContinue
