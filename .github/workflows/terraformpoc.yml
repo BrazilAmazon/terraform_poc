@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ContinueToApprovals: ${{ steps.tf-plan-string.outputs.ContinueToApprovals }}
+      TERRAFORM_PLAN: ${{ steps.tf-plan-string.outputs.TERRAFORM_PLAN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -103,6 +104,7 @@ jobs:
             export ContinueToApprovals=1
           fi
           echo "ContinueToApprovals=$ContinueToApprovals" >> $GITHUB_OUTPUT
+          echo "TERRAFORM_PLAN=$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
         
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
@@ -130,7 +132,7 @@ jobs:
           python -m pip install requests
       - name: execute py script
         run: |
-          python my_file.py "${{ secrets.TOKEN }}" "TerraformDestroyPLan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
+          python my_file.py "${{ secrets.TOKEN }}" "${{ needs.terraform.outputs.TERRAFORM_PLAN }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
       - name: print env
         id: tf-plan-string
         run: |
