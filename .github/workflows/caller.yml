@@ -27,6 +27,6 @@ jobs:
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
       Tf_Destroy: ${{ inputs.Destroy }}
     secrets:
-      #ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+      Github_Token: ${{ secrets.TOKEN }}
       TF_API_TOKEN: ${{ inputs.Team == 'Platform_Team' &&  secrets.TF_API_TOKEN || inputs.Team == 'Dev_Team' &&  secrets.TF_API_TOKEN_DEV_TEAM || inputs.Team == 'System_Team' &&  secrets.TF_API_TOKEN_SYSTEM_TEAM }}
       
