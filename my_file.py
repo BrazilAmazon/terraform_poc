@@ -7,7 +7,7 @@ def IssueDescription(plan,url):
     ** Valid Approve Comments are _"Approved", "Approve", "approved", "approve"_ to Continue the Terraform Destroy Apply **
     ** Valid Dis-Approve or Cancel Comments are _"Denied", "Deny", "denied", "deny"_ to Cancel the Terraform Destroy Apply **
     """
-    Github_RUN_Url = f"{url}"
+    Github_RUN_Url = f"Github Run Url -- {url}"
     
     IssueDescription = f"{plan}                -----------------------     {approvalbody}                -----------------------      {url}"
     return IssueDescription
