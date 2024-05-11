@@ -99,7 +99,7 @@ jobs:
       - name: Create String Output
         id: tf-plan-string
         run: |
-          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan) 
           if echo "$TERRAFORM_PLAN" | grep -q 'No changes. No objects need to be destroyed.'
           then
             export ContinueToApprovals=0
@@ -107,7 +107,8 @@ jobs:
             export ContinueToApprovals=1
           fi
           echo "ContinueToApprovals=$ContinueToApprovals" >> $GITHUB_OUTPUT
-          echo "Terraformdestroyplan=$(terraform show -no-color tfplan)" >> $GITHUB_OUTPUT
+          echo "Terraformdestroyplan=$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+
         
       - name: Publish Artifact - Terraform Plan
         uses: actions/upload-artifact@v3
