@@ -135,7 +135,7 @@ jobs:
       - name: print env
         id: tf-plan-string
         run: |
-          echo "$TerraformApplyContinue"
+          echo "${{steps.outputs.TerraformApplyContinue}}"
 
   apply:
     needs: ['Approvals']
