@@ -76,7 +76,7 @@ jobs:
             echo $PWD
             echo "+++++++++++++++++++++++++++++"
             if [[ "${#autotfvars[@]}" -gt 1 ]] ; then
-                    terraform plan -var-file=<(cat ${autotfvars[*]}) -no-color -out tfplan || export exitcode=$?
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[*]}) -no-color -out tfplan || export exitcode=$?
             		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
                     
                     if [ $exitcode -eq 1 ]; then
@@ -86,7 +86,7 @@ jobs:
                       exit 0
                     fi
             else
-                    terraform plan -var-file=<(cat ${autotfvars[0]}) -no-color -out tfplan || export exitcode=$?
+                    terraform plan -destroy -var-file=<(cat ${autotfvars[0]}) -no-color -out tfplan || export exitcode=$?
             		echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
                     
                     if [ $exitcode -eq 1 ]; then
@@ -154,6 +154,7 @@ jobs:
         run: |
           terraformplan=$(terraform show -no-color tfplan)
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
+          echo "$getlinenumber"
           python my_file.py "$GithubToken" "echo '${terraformplan}' | head -n 'getlinenumber'" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
 
 
