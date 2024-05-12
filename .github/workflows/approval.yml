@@ -152,7 +152,9 @@ jobs:
       - name: execute py script
         id: continuerun
         run: |
-          python my_file.py "$GithubToken" "$(terraform show -no-color tfplan)" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
+          terraformplan=$(terraform show -no-color tfplan)
+          getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
+          python my_file.py "$GithubToken" "echo '${terraformplan}' | head -n 'getlinenumber'" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
 
 
   apply:
