@@ -154,7 +154,7 @@ jobs:
         run: |
           terraformplan=$(terraform show -no-color tfplan)
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
-          plan=(echo "$terraformplan" | head -n "getlinenumber")
+          plan=$(echo "${terraformplan}" | head -n "getlinenumber")
           python my_file.py "$GithubToken" "$plan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
 
 
