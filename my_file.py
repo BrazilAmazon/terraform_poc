@@ -4,7 +4,7 @@ import requests, json, sys, time, os
 def IssueDescription(plan,url):
     approvalbody = """
     
-    #Terraform Approval and Cancel Instructions
+    # Terraform Approval and Cancel Instructions
     **Valid Approve Comments are _"Approved"_, _"Approve"_, _"approved"_, _"approve"_ to Continue the Terraform Destroy Apply**
     **Valid Dis-Approve or Cancel Comments are _"Denied"_, _"Deny"_, _"denied"_, _"deny"_ to Cancel the Terraform Destroy Apply**
     """
