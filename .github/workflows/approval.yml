@@ -162,7 +162,7 @@ jobs:
         id: continuerun
         run: |
             import requests, json, sys, time, os  
-            with open(os.environ['GITHUB_OUTPUT'], 'a') as GETENV:
+            with open(os.environ['GITHUB_OUTPUT'], 'r') as GETENV:
               RunId = [line.strip() for line in GETENV.readlines() if line == 'ContinueToApprovals']
 
             def IssueDescription(plan,url):
