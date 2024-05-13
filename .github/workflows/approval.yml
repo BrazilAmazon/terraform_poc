@@ -155,16 +155,13 @@ jobs:
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
           plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p')
           export GithubToken=$GithubToken
-          export Terraplan=$plan
-          export RunUrl=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          export RunId=${{ needs.terraform.outputs.ContinueToApprovals }}
+          echo "$plan" > plan.txt
       - name: execute py script
         id: continuerun
         run: |
             import requests, json, sys, time, os  
-            with open(os.environ['GITHUB_OUTPUT'], 'r') as GETENV:
-              RunId = [line.strip() for line in GETENV.readlines() if line == 'ContinueToApprovals']
-
+            with open("plan.txt", 'r') as GETPLAN:
+              plan = GETPLAN.readlines()
             def IssueDescription(plan,url):
                 approvalbody = '''
                 -----
@@ -190,7 +187,7 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan=os.environ.get('Terraplan'),url=os.environ.get('RunUrl'))
+            Description = IssueDescription(plan=plan,url=os.environ.get('RunUrl'))
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
