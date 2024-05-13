@@ -161,7 +161,7 @@ jobs:
         run: |
             import requests, json, sys, time, os  
             with open("plan.txt", 'r') as GETPLAN:
-              plan = GETPLAN.readlines()
+              plan = GETPLAN.read()
             def IssueDescription(plan,url):
                 approvalbody = '''
                 -----
