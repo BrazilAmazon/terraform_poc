@@ -157,7 +157,7 @@ jobs:
           export GithubToken=$GithubToken
           export Terraplan=$plan
           export RunUrl=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          export RunId=${{ github.run_id }}
+          export RunId=${{ needs.terraform.outputs.ContinueToApprovals }}
       - name: execute py script
         id: continuerun
         run: |
@@ -187,7 +187,7 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan=os.environ['Terraplan'],url=os.environ.get('RunUrl'))
+            Description = IssueDescription(plan=os.environ.get('Terraplan'),url=os.environ.get('RunUrl'))
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
