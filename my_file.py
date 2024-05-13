@@ -20,8 +20,8 @@ def IssueDescription(plan,url):
 Github_PAT = sys.argv[1] #{sys.argv[1]}
 owner = "BrazilAmazon"
 repo = "terraform_poc"
-assignees = {"Abdulk777"}
-temp_assignees = ["Abdulk777"]
+assignees = {"Abdul007k","Abdulk777"}
+temp_assignees = ["Abdul007k","Abdulk777"]
 def headers(token):
     headers = {
         "accept" : "application/vnd.github+json",
