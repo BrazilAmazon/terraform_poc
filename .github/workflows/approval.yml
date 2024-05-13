@@ -187,11 +187,11 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan=plan,url=os.environ.get('RunUrl'))
+            Description = IssueDescription(plan=plan,url="test")
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-                body = {"title":f"Terraform Approval Run ID:{RunId}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{'test'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
                 CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return CreateIssue
@@ -201,7 +201,7 @@ jobs:
             def UpdateIssue():
             
                 UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-                body = {"title":f"Terraform Approval Run ID:{RunId}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{'test'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
                 UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return UpdateIssue_State
