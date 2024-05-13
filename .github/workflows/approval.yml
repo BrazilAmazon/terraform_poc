@@ -187,7 +187,7 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan=$plan,url=os.environ.get('RunUrl'))
+            Description = IssueDescription(plan=os.environ.get('Terraplan'),url=os.environ.get('RunUrl'))
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
