@@ -161,7 +161,10 @@ jobs:
       - name: execute py script
         id: continuerun
         run: |
-            import requests, json, sys, time, os     
+            import requests, json, sys, time, os  
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as GETENV:
+            RunId = [line.strip() for line in GETENV.readlines() if line == 'ContinueToApprovals']
+
             def IssueDescription(plan,url):
                 approvalbody = '''
                 -----
@@ -191,7 +194,7 @@ jobs:
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-                body = {"title":f"Terraform Approval Run ID:{os.environ.get('RunId')}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{RunId}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
                 CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return CreateIssue
@@ -201,7 +204,7 @@ jobs:
             def UpdateIssue():
             
                 UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-                body = {"title":f"Terraform Approval Run ID:{os.environ.get('RunId')}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{RunId}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
                 UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return UpdateIssue_State
