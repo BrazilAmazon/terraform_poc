@@ -154,22 +154,28 @@ jobs:
         run: |
           terraformplan=$(terraform show -no-color tfplan)
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
-          echo plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p') >> $GITHUB_OUTPUT
-          export GithubToken=$GithubToken
-      - name: execute py script
-        id: continuerun
-        run: |
-            import requests, json, sys, time, os  
-            def IssueDescription(plan,url):
-                approvalbody = '''
+          echo plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p') > issuesbody.txt
+          echo "===============================================" >> issuesbody.txt
+          echo "Github Run Url ::: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> issuesbody.txt
+          approvalbody = '''
                 -----
                 ##Terraform Approval and Cancel Instructions
                 **Valid Approve Comments are _"Approved"_, _"Approve"_, _"approved"_, _"approve"_ to Continue the Terraform Destroy Apply**
                 **Valid Dis-Approve or Cancel Comments are _"Denied"_, _"Deny"_, _"denied"_, _"deny"_ to Cancel the Terraform Destroy Apply**
                 '''
-                Github_RUN_Url = f"Github Run Url -- {url}"
+          echo "===============================================" >> issuesbody.txt
+          echo "$approvalbody" >> issuesbody.txt
+          export GithubToken=$GithubToken
+      - name: execute py script
+        id: continuerun
+        run: |
+            import requests, json, sys, time, os  
+            def IssueDescription():
+                
+                with open("issuesbody.txt", 'r') as GETPLAN:
+                  plan = GETPLAN.read()
             
-                IssueDescription = f"{plan}-{approvalbody}-{Github_RUN_Url}"
+                IssueDescription = f"{plan}"
                 return IssueDescription
             
             Github_PAT = os.environ.get('GithubToken') #sys.argv[1] #{sys.argv[1]}
@@ -185,7 +191,7 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan='${{ steps.plangithuburlrunid.outputs.plan }}',url="test")
+            Description = IssueDescription()
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
