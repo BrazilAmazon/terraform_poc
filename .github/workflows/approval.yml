@@ -154,7 +154,8 @@ jobs:
         run: |
           terraformplan=$(terraform show -no-color tfplan)
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
-          echo plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p') > issuesbody.txt
+          plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p') 
+          echo "$plan" > issuesbody.txt
           echo "===============================================" >> issuesbody.txt
           echo "Github Run Url ::: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> issuesbody.txt
           approvalbody='
