@@ -186,7 +186,7 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan="${{ steps.plangithuburlrunid.outputs.plan }}",url="test")
+            Description = IssueDescription(plan='${{ steps.plangithuburlrunid.outputs.plan }}',url="test")
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
