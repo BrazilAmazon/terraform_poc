@@ -28,7 +28,9 @@ jobs:
       - name: execute py script
         id: code
         run: |
-          python my_file.py "${{ secrets.TOKEN }}" "TerraformDestroyPLan" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "${{ github.run_id }}"
+          echo "TerraformApplyContinue=Abdul" >> $GITHUB_OUTPUT
       - name: print env
         run: |
-          echo "${{ steps.code.outputs.TerraformApplyContinue }}"
+          test = "${{ steps.code.outputs.TerraformApplyContinue }}"
+          print(test)
+        shell: python
