@@ -150,12 +150,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install requests
       - name: export py script env variables
+        id: plangithuburlrunid
         run: |
           terraformplan=$(terraform show -no-color tfplan)
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
           plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p')
           export GithubToken=$GithubToken
-          echo "$plan" > plan.txt
+          echo "plan=$plan" >> $GITHUB_OUTPUT
       - name: execute py script
         id: continuerun
         run: |
@@ -187,7 +188,7 @@ jobs:
                 }
                 return headers
             
-            Description = IssueDescription(plan=plan,url="test")
+            Description = IssueDescription(plan="${{ steps.plangithuburlrunid.outputs.plan }}",url="test")
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
