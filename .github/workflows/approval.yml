@@ -181,7 +181,7 @@ jobs:
             owner = "BrazilAmazon"
             repo = "terraform_poc"
             assignees = {"Abdul007k","Abdulk777"}
-            temp_assignees = ["Abdul007k","Abdulk777"]
+            temp_assignees = list(assignees)
             def headers(token):
                 headers = {
                     "accept" : "application/vnd.github+json",
@@ -194,7 +194,7 @@ jobs:
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-                body = {"title":f"Terraform Approval Run ID:{'${{steps.plangithuburlrunid.outputs.RunID}}'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{'${{steps.plangithuburlrunid.outputs.RunID}}'}","body":f"{Description}.","assignees":temp_assignees,"labels":["Terraform Approval"]}
                 CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return CreateIssue
@@ -204,7 +204,7 @@ jobs:
             def UpdateIssue():
             
                 UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-                body = {"title":f"Terraform Approval Run ID:{'${{steps.plangithuburlrunid.outputs.RunID}}'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{'${{steps.plangithuburlrunid.outputs.RunID}}'}","body":f"{Description}.","assignees":temp_assignees, "state":"closed" ,"labels":["Terraform Approval"]}
                 UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return UpdateIssue_State
