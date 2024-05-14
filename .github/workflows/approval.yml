@@ -156,7 +156,7 @@ jobs:
           getlinenumber=$(echo "${terraformplan}" | grep -n 'Run status: planned and saved (confirmable)' | head -n1 | sed 's/:.*//')
           plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p')
           export GithubToken=$GithubToken
-          echo 'plan="$plan"' >> $GITHUB_OUTPUT
+          echo 'plan=(echo "$plan")' >> $GITHUB_OUTPUT
       - name: execute py script
         id: continuerun
         run: |
