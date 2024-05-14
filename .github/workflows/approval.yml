@@ -141,10 +141,7 @@ jobs:
          
       - name: Terraform Init
         run: terraform init
-      - name: setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
+        
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -157,7 +154,8 @@ jobs:
           plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p') 
           echo "$plan" > issuesbody.txt
           echo "===============================================" >> issuesbody.txt
-          echo Github Run Url ::: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} >> issuesbody.txt
+          GitRunUrl=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          echo "Github Run Url - $GitRunUrl" >> issuesbody.txt
           approvalbody='
                 -----
                 ##Terraform Approval and Cancel Instructions
@@ -166,6 +164,7 @@ jobs:
                 '
           echo "===============================================" >> issuesbody.txt
           echo "$approvalbody" >> issuesbody.txt
+          echo RunID=${{ github.run_id }} >> $GITHUB_OUTPUT
           export GithubToken=$GithubToken
       - name: execute py script
         id: continuerun
@@ -196,7 +195,7 @@ jobs:
             def CreateIssue():
             
                 CreateIssueForApproval = f"https://api.github.com/repos/{owner}/{repo}/issues"
-                body = {"title":f"Terraform Approval Run ID:{'test'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{'${{steps.plangithuburlrunid.outputs.RunID}}'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"],"labels":["Terraform Approval"]}
                 CreateIssue = requests.post(CreateIssueForApproval,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return CreateIssue
@@ -206,7 +205,7 @@ jobs:
             def UpdateIssue():
             
                 UpdateIssueState = f"https://api.github.com/repos/{owner}/{repo}/issues/{IssueNumner.json()['number']}"
-                body = {"title":f"Terraform Approval Run ID:{'test'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
+                body = {"title":f"Terraform Approval Run ID:{'${{steps.plangithuburlrunid.outputs.RunID}}'}","body":f"{Description}.","assignees":["Abdul007k","Abdulk777"], "state":"closed" ,"labels":["Terraform Approval"]}
                 UpdateIssue_State = requests.patch(UpdateIssueState,headers=headers(token=Github_PAT), data=json.dumps(body))
             
                 return UpdateIssue_State
