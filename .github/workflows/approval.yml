@@ -157,7 +157,7 @@ jobs:
           plan=$(echo "${terraformplan}" | head -n "$getlinenumber" | sed -n '1!p') 
           echo "$plan" > issuesbody.txt
           echo "===============================================" >> issuesbody.txt
-          echo "Github Run Url ::: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> issuesbody.txt
+          echo Github Run Url ::: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} >> issuesbody.txt
           approvalbody='
                 -----
                 ##Terraform Approval and Cancel Instructions
