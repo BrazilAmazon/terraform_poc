@@ -179,7 +179,7 @@ jobs:
             Github_PAT = os.environ.get('GithubToken') #sys.argv[1] #{sys.argv[1]}
             owner = "BrazilAmazon"
             repo = "terraform_poc"
-            assignees = {"Abdul007k","Abdulk777"}
+            assignees = {"Abdulk777"}
             temp_assignees = list(assignees)
             def headers(token):
                 headers = {
