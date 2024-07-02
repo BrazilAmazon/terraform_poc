@@ -11,4 +11,4 @@ jobs:
         with:
           DotNet_Version: 8.0.x
       - name: print env vars
-        run: echo "${{ env.WEBSERVER_URL }}"
+        run: echo "${{ env.DotNet_Version }}"
