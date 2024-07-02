@@ -1,0 +1,14 @@
+name: hello-world
+on: push
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: my-step
+        run: echo "Hello World!"
+      - name: Load Variables from Source Control
+        uses: doughepi/yaml-env-action@v1.0.0
+        with:
+          DotNet_Version: 8.0.x
+      - name: print env vars
+        run: echo "${{ env.WEBSERVER_URL }}"
